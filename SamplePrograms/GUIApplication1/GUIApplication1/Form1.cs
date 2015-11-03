@@ -17,9 +17,19 @@ namespace GUIApplication1
             InitializeComponent();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
-            
+            OpenFileDialog open = new OpenFileDialog();
+            // image filters
+            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                // display image in picture box
+                pictureBox1.Image = new Bitmap(open.FileName);
+                // image file path
+                //textBox1.Text = open.FileName;
+            }
+
         }
     }
 }
