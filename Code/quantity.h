@@ -7,7 +7,7 @@ quantity.h - header file for the quantity verification software
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		Class Created, Added initialize() Function
+Lee				12/22/15		quantity class created, added initialize() function
 
 
 --------------------------------------------------------------------------------

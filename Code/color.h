@@ -7,7 +7,7 @@ color.h - header file for the color verification software
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		Class Created, Added initialize() Function
+Lee				12/22/15		color class created, added initialize() function
 
 
 --------------------------------------------------------------------------------

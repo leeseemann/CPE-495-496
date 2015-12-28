@@ -7,7 +7,7 @@ profile.cpp - source file for the profile verification software
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		File Created, Added initialize() Function
+Lee				12/22/15		file created, added initialize() function
 
 
 --------------------------------------------------------------------------------

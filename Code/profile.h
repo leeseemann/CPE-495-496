@@ -7,7 +7,7 @@ profile.h - header file for the profile verification software
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		Class Created, Added initialize() Function
+Lee				12/22/15		profile class created, added initialize() function
 
 
 --------------------------------------------------------------------------------

@@ -7,25 +7,23 @@ main.cpp - primary source file of the project
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		File Created, Tested initialize() Functions
-
-
+Lee				12/22/15		file created
+Lee				12/28/15		added instance of driver class
 --------------------------------------------------------------------------------
 */
 
 using namespace std;
 
-#include "main.h"
+#include "driver.h"
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
 
+
 int main()
 {
-	verify_profile.initialize(); // initialize profile verification
-	verify_length.initialize(); // initialize length verification
-	verify_color.initialize(); // initialize color verification
-	verify_quantity.initialize(); // initialize quantity verification
+	driver driver;
+	driver.startup();
 
 	cin.get(); // allows the output of the program to be viewed
 	return 0;

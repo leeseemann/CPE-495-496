@@ -2,33 +2,36 @@
 2015-2016 CPE Senior Design - Steelcase Answer Pack Verification
 Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
-quantity.cpp - source file for the quantity verification software
+driver.cpp - source file for the length verification software
 
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		file created, added initialize() function
+Lee				12/28/15		file created, added startup() function
 
 
 --------------------------------------------------------------------------------
 */
 
-#include "quantity.h"
+#include "driver.h"
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
 
 using namespace std;
 
-quantity::quantity()
+driver::driver()
 {
 }
 
-void quantity::initialize()
+void driver::startup()
 {
-	cout << "Initializing Quantity Verification Software" << endl;
+	verify_profile.initialize(); // initialize profile verification
+	verify_length.initialize(); // initialize length verification
+	verify_color.initialize(); // initialize color verification
+	verify_quantity.initialize(); // initialize quantity verification
 }
 
-quantity::~quantity()
+driver::~driver()
 {
 }

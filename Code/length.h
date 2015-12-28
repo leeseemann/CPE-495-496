@@ -7,7 +7,7 @@ length.h - header file for the length verification software
 Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
-Lee				12/22/15		Class Created, Added initialize() Function
+Lee				12/22/15		length class created, added initialize() function
 
 
 --------------------------------------------------------------------------------
