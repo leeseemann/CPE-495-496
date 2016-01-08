@@ -27,6 +27,7 @@ profile::profile()
 void profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl;
+	return;
 }
 
 profile::~profile()

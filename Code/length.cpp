@@ -27,6 +27,7 @@ length::length()
 void length::initialize()
 {
 	cout << "Initializing Length Verification Software" << endl;
+	return;
 }
 
 length::~length()

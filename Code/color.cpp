@@ -27,6 +27,7 @@ color::color()
 void color::initialize()
 {
 	cout << "Initializing Color Verification Software" << endl;
+	return;
 }
 
 color::~color()

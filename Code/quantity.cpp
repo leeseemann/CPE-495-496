@@ -27,6 +27,7 @@ quantity::quantity()
 void quantity::initialize()
 {
 	cout << "Initializing Quantity Verification Software" << endl;
+	return;
 }
 
 quantity::~quantity()

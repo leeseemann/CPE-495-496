@@ -30,6 +30,7 @@ void driver::startup()
 	verify_length.initialize(); // initialize length verification
 	verify_color.initialize(); // initialize color verification
 	verify_quantity.initialize(); // initialize quantity verification
+	return;
 }
 
 driver::~driver()
