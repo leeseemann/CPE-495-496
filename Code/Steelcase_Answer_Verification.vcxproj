@@ -153,13 +153,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="color.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="driver.h" />
     <ClInclude Include="length.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="profile.h" />
     <ClInclude Include="quantity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="database.cpp" />
     <ClCompile Include="driver.cpp" />
     <ClCompile Include="length.cpp" />
     <ClCompile Include="main.cpp" />

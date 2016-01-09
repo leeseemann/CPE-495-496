@@ -12,10 +12,13 @@ Lee				12/22/15		color class created, added initialize() function
 
 --------------------------------------------------------------------------------
 */
-
 #ifndef COLOR_H
 #define COLOR_H
 #pragma once
+
+#include <iostream>
+#include <iomanip>
+#include <stdlib.h>
 
 class color
 {

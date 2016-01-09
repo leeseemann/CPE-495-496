@@ -12,7 +12,6 @@ Lee				12/28/15		file created, added startup() function
 
 --------------------------------------------------------------------------------
 */
-
 #include "driver.h"
 #include <iostream>
 #include <iomanip>

@@ -12,10 +12,13 @@ Lee				12/22/15		quantity class created, added initialize() function
 
 --------------------------------------------------------------------------------
 */
-
 #ifndef QUANTITY_H
 #define QUANTITY_H
 #pragma once
+
+#include <iostream>
+#include <iomanip>
+#include <stdlib.h>
 
 class quantity
 {

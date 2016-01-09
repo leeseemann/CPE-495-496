@@ -12,11 +12,7 @@ Lee				12/22/15		file created, added initialize() function
 
 --------------------------------------------------------------------------------
 */
-
 #include "quantity.h"
-#include <iostream>
-#include <iomanip>
-#include <stdlib.h>
 
 using namespace std;
 

@@ -12,10 +12,13 @@ Lee				12/22/15		length class created, added initialize() function
 
 --------------------------------------------------------------------------------
 */
-
 #ifndef LENGTH_H
 #define LENGTH_H
 #pragma once
+
+#include <iostream>
+#include <iomanip>
+#include <stdlib.h>
 
 class length
 {

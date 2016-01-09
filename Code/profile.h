@@ -12,10 +12,13 @@ Lee				12/22/15		profile class created, added initialize() function
 
 --------------------------------------------------------------------------------
 */
-
 #ifndef PROFILE_H
 #define PROFILE_H
 #pragma once
+
+#include <iostream>
+#include <iomanip>
+#include <stdlib.h>
 
 class profile
 {

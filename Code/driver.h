@@ -12,7 +12,6 @@ Lee				12/28/15		driver class created, added startup() function
 
 --------------------------------------------------------------------------------
 */
-
 #ifndef DRIVER_H
 #define DRIVER_H
 #pragma once
@@ -21,6 +20,10 @@ Lee				12/28/15		driver class created, added startup() function
 #include "length.h"
 #include "color.h"
 #include "quantity.h"
+#include <string>
+#include <occi.h>
+
+using namespace std;
 
 class driver
 {
