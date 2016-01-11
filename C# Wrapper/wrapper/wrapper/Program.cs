@@ -25,7 +25,7 @@ namespace wrapper
     static class Program
     {
         [STAThread]
-        [DllImport("A:\\School\\Spring 2016\\CPE 496\\Code\\CPE_Senior_Design\\DLL\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
+        [DllImport("A:\\School\\Spring 2016\\CPE 496\\Code\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
         public static extern void Steelcase_Answer_Verification();
 
         static void Main()

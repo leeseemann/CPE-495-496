@@ -8,6 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/28/15		file created, created instance of driver class
+Lee				1/9/16			added database.h and database.cpp
 
 
 --------------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Lee				12/28/15		file created, created instance of driver class
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\color.cpp"
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\quantity.h"
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\quantity.cpp"
+#include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.h"
+#include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.cpp"
 
 extern "C" __declspec(dllexport) void Steelcase_Answer_Verification()
 {

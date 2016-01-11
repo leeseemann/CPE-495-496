@@ -19,7 +19,6 @@ using namespace std;
 database::database()
 {
 }
-
 oracle::occi::Connection* database::connectDatabase(string userName, string password, string connectString)
 {
 	oracle::occi::Environment *env = oracle::occi::Environment::createEnvironment(); // create Oracle environment
@@ -39,8 +38,8 @@ oracle::occi::ResultSet* database::queryDatabase(oracle::occi::Connection* conn,
 database::~database()
 {
 	// terminate the Oracle database connection and environment
-	query->closeResultSet(result);
-	conn->terminateStatement(query);
-	env->terminateConnection(conn);
-	oracle::occi::Environment::terminateEnvironment(env);
+	//query->closeResultSet(result);
+	//conn->terminateStatement(query);
+	//env->terminateConnection(conn);
+	//oracle::occi::Environment::terminateEnvironment(env);
 }
