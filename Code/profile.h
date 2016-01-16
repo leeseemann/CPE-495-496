@@ -8,6 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		profile class created, added initialize() function
+Lee				1/16/16			added header files for Kinect SDK
 
 
 --------------------------------------------------------------------------------
@@ -19,6 +20,8 @@ Lee				12/22/15		profile class created, added initialize() function
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
+#include <Windows.h>
+#include <NuiApi.h>
 
 class profile
 {

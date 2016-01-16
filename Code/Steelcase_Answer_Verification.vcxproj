@@ -106,13 +106,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>A:\oracle\app\oracle\product\11.2.0\server\oci\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Files\OCCI\include;A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Files\Kinect\inc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>A:\oracle\app\oracle\product\11.2.0\server\oci\lib\MSVC</AdditionalLibraryDirectories>
-      <AdditionalDependencies>oraocci11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Files\OCCI\MSVC;A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Files\Kinect\lib\amd64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Kinect10.lib;oraocci11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
