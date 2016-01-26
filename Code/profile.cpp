@@ -9,7 +9,7 @@ Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		file created, added initialize() function
 Lee				1/25/16			added initialize_Kinect() and getKinectFrame() functions
-
+Lee				1/25/16			added glut functions to display Kinect frame
 --------------------------------------------------------------------------------
 */
 #include "profile.h"
@@ -18,12 +18,22 @@ using namespace std;
 
 profile::profile()
 {
+
 }
 
 void profile::initialize()
 {
-	cout << "Initializing Profile Verification Software" << endl; \
+	cout << "Initializing Profile Verification Software" << endl; 
+	
+	init_glut = initialize_glut();
+	if (init_glut == false)
+		cout << "ERROR: GLUT not initialized" << endl;
+
 	init_Kinect = initialize_Kinect();
+	if (init_Kinect == false)
+		cout << "ERROR: Kinect not initialized" << endl;
+
+	glutMainLoop();
 
 	return;
 }
@@ -82,6 +92,71 @@ void profile::getKinectFrame(GLubyte* destination)
 	texture->UnlockRect(0); // unlock the frame
 	sensor->NuiImageStreamReleaseFrame(rgbStream, &imageFrame); // release the frame
 }
+
+bool profile::initialize_glut()
+{
+	instance = this;
+	glutInit(&myargc, myargv);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowSize(width, height);
+	glutCreateWindow("Kinect Image");
+	glutDisplayFunc(draw_wrapper);
+	glutIdleFunc(draw_wrapper);
+	return true;
+}
+
+void profile::draw_wrapper()
+{
+	instance->draw();
+}
+
+void profile::draw()
+{
+	drawKinectData();
+	glutSwapBuffers();
+}
+
+void profile::drawKinectData()
+{
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	getKinectFrame(data);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0, 0, 0);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(width, 0, 0);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(width, height, 0.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0, height, 0.0f);
+	glEnd();
+}
+
+void profile::initialize_camera()
+{
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
+		0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glClearColor(0, 0, 0, 0);
+	glClearDepth(1.0f);
+	glEnable(GL_TEXTURE_2D);
+
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+
 
 profile::~profile()
 {

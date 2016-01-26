@@ -9,8 +9,8 @@ Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		profile class created, added initialize() function
 Lee				1/16/16			added header files for Kinect SDK
-Lee				1/25/16			added Kinect and OpenGL variables/functions for Kinect interaction
-
+Lee				1/25/16			added Kinect and OpenGL variables/functions for retrieving Kinect frame
+Lee				1/25/16			added glut variables/functions for display Kinect frame
 
 --------------------------------------------------------------------------------
 */
@@ -28,6 +28,7 @@ Lee				1/25/16			added Kinect and OpenGL variables/functions for Kinect interact
 #include <NuiSensor.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
+#include <glut.h>
 
 // define the size of the Kinect frame
 #define width 640
@@ -38,8 +39,18 @@ class profile
 public:
 	profile(); // class constructor
 	void initialize();
+	// Kinect Functions
 	bool initialize_Kinect();	// initialize the Kinect
 	void getKinectFrame(GLubyte* destination);  // retrieve a frame from the Kinect
+	int myargc;
+	char* myargv[2];
+
+	// OpenGL Functions
+	bool initialize_glut();
+	void draw();
+	static void draw_wrapper();
+	void drawKinectData();
+	void initialize_camera();
 	~profile(); // class destructor 
 
 	//Kinect variables
@@ -52,10 +63,22 @@ public:
 
 	// OpenGL Variables
 	GLuint textureID;	// ID of the texture to contain RGB data from Kinect
-	GLubyte data[width * height * 4];  // array containing the texture data
-
-	
+	GLubyte data[width * height * 4];  // array containing the texture data	
+	bool init_glut = false;
 };
+
+/*class opengl
+{
+public:
+	void draw();
+private:
+	void setupDrawCallback();
+};*/
+
+//opengl* instance;
+//void draw_wrapper();
+//bool initialize_glut();
+static profile* instance;
 
 #endif
 
