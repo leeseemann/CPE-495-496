@@ -28,12 +28,22 @@ void profile::initialize()
 	init_glut = initialize_glut();
 	if (init_glut == false)
 		cout << "ERROR: GLUT not initialized" << endl;
+	else
+		cout << "Initializing GLUT Software" << endl;
 
 	init_Kinect = initialize_Kinect();
 	if (init_Kinect == false)
 		cout << "ERROR: Kinect not initialized" << endl;
+	else
+		cout << "Initializing Kinect Sensor" << endl;
 
-	glutMainLoop();
+	init_camera = initialize_camera();
+	if (init_camera == false)
+		cout << "ERROR: Camera not initialized" << endl;
+	else
+		cout << "Initializing Camera" << endl;
+
+	glutMainLoop(); // glut function that calls draw_wrapper
 
 	return;
 }
@@ -52,7 +62,8 @@ bool profile::initialize_Kinect()
 		return false;
 	}
 
-	sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_DEPTH | NUI_INITIALIZE_FLAG_USES_COLOR); // initialize the Kinect and specify depth/color and flags
+	// initialize sensor
+	sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_DEPTH | NUI_INITIALIZE_FLAG_USES_COLOR); // initialize the Kinect and specify depth/color as flags
 	sensor->NuiImageStreamOpen(
 		NUI_IMAGE_TYPE_COLOR,          // depth or rgb camera
 		NUI_IMAGE_RESOLUTION_640x480,  // image resolution
@@ -64,11 +75,44 @@ bool profile::initialize_Kinect()
 	return sensor;
 }
 
+bool profile::initialize_glut()
+{
+	instance = this;
+	glutInit(&myargc, myargv);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowSize(width, height);
+	glutCreateWindow("Kinect Image");
+	glutDisplayFunc(draw_wrapper);
+	glutIdleFunc(draw_wrapper);
+	return true;
+}
+
+bool profile::initialize_camera()
+{
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
+		0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glClearColor(0, 0, 0, 0);
+	glClearDepth(1.0f);
+	glEnable(GL_TEXTURE_2D);
+
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	return true;
+}
+
 void profile::getKinectFrame(GLubyte* destination)
 {
-	NUI_IMAGE_FRAME imageFrame;
-	NUI_LOCKED_RECT lockedRect;
-
 	if (sensor->NuiImageStreamGetNextFrame(rgbStream, 0, &imageFrame) < 0) // retrieve a frame from Kinect
 	{
 		cout << "ERROR: Failed to Retrieve Kinect Frame" << endl;
@@ -93,30 +137,12 @@ void profile::getKinectFrame(GLubyte* destination)
 	sensor->NuiImageStreamReleaseFrame(rgbStream, &imageFrame); // release the frame
 }
 
-bool profile::initialize_glut()
-{
-	instance = this;
-	glutInit(&myargc, myargv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(width, height);
-	glutCreateWindow("Kinect Image");
-	glutDisplayFunc(draw_wrapper);
-	glutIdleFunc(draw_wrapper);
-	return true;
-}
-
 void profile::draw_wrapper()
 {
-	instance->draw();
+	instance->drawKinectFrame();
 }
 
-void profile::draw()
-{
-	drawKinectData();
-	glutSwapBuffers();
-}
-
-void profile::drawKinectData()
+void profile::drawKinectFrame()
 {
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	getKinectFrame(data);
@@ -132,31 +158,9 @@ void profile::drawKinectData()
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0, height, 0.0f);
 	glEnd();
+
+	glutSwapBuffers();
 }
-
-void profile::initialize_camera()
-{
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
-		0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glClearColor(0, 0, 0, 0);
-	glClearDepth(1.0f);
-	glEnable(GL_TEXTURE_2D);
-
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, width, height, 0, 1, -1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-}
-
-
 
 profile::~profile()
 {
