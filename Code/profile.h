@@ -42,7 +42,7 @@ public:
 	void initialize();
 
 	// Kinect Functions
-	bool initialize_Kinect();	// initialize the Kinect
+	/*bool initialize_Kinect();	// initialize the Kinect
 	void getKinectFrame(GLubyte* destination);  // retrieve a frame from the Kinect
 
 	// OpenGL Functions
@@ -67,7 +67,7 @@ public:
 	bool init_glut = false;
 	bool init_camera = false;
 	int myargc;
-	char* myargv[2];
+	char* myargv[2];*/
 
 	~profile(); // class destructor 
 };

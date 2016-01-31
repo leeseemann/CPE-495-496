@@ -9,7 +9,7 @@ Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/28/15		file created, added startup() function
 Lee				1/9/16			used OCCI to created Oracle database connection, executed test query
-
+Lee				1/31/16			modified startup() to receive data from C# wrapper
 
 --------------------------------------------------------------------------------
 */
@@ -21,7 +21,7 @@ driver::driver()
 {
 }
 
-void driver::startup()
+void driver::startup(short depth_data[])
 {
 	verify_profile.initialize(); // initialize profile verification
 	verify_length.initialize(); // initialize length verification
@@ -39,6 +39,8 @@ void driver::startup()
 	result_query = oracle_db.queryDatabase(conn, query_string);
 	while (result_query->next())
 		cout << "result: " << result_query->getInt(1) << endl;
+
+	cout << "info: " << depth_data[0];
 
 	return;
 }

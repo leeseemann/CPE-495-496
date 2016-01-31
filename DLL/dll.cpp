@@ -9,6 +9,7 @@ Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/28/15		file created, created instance of driver class
 Lee				1/9/16			added database.h and database.cpp
+Lee				1/31/16			added the parameter depth_data
 
 
 --------------------------------------------------------------------------------
@@ -27,8 +28,8 @@ Lee				1/9/16			added database.h and database.cpp
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.h"
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.cpp"
 
-extern "C" __declspec(dllexport) void Steelcase_Answer_Verification()
+extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[])
 {
 	driver project_driver;
-	project_driver.startup();
+	project_driver.startup(depth_data);
 }
