@@ -9,7 +9,7 @@ Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/28/15		driver class created, added startup() function
 Lee				1/9/16			added OCCI and database connection variables, 
-
+Lee				1/31/16			modified startup() to receive data from C# wrapper
 
 --------------------------------------------------------------------------------
 */
@@ -33,7 +33,7 @@ class driver
 {
 public:
 	driver();
-	void startup();
+	void startup(short depth_data[]);
 	~driver();
 
 	profile verify_profile;

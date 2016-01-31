@@ -18,7 +18,7 @@ using namespace std;
 
 int main()
 {
-	project_driver.startup();
+	project_driver.startup(depth_data);
 	cin.get(); // allows the output of the program to be viewed
 	return 0;
 }

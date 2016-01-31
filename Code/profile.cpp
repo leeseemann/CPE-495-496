@@ -25,7 +25,7 @@ void profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
 	
-	init_glut = initialize_glut();
+	/*init_glut = initialize_glut();
 	if (init_glut == false)
 		cout << "ERROR: GLUT not initialized" << endl;
 	else
@@ -43,12 +43,12 @@ void profile::initialize()
 	else
 		cout << "Initializing Camera" << endl;
 
-	glutMainLoop(); // glut function that calls draw_wrapper
+	glutMainLoop(); // glut function that calls draw_wrapper*/
 
 	return;
 }
 
-bool profile::initialize_Kinect()
+/*bool profile::initialize_Kinect()
 {
 	int numSensors;
 	if (NuiGetSensorCount(&numSensors) < 0 || numSensors < 1) // determine if a Kinect is attached and running
@@ -73,9 +73,9 @@ bool profile::initialize_Kinect()
 		&rgbStream);
 
 	return sensor;
-}
+}*/
 
-bool profile::initialize_glut()
+/*bool profile::initialize_glut()
 {
 	instance = this;
 	glutInit(&myargc, myargv);
@@ -109,9 +109,9 @@ bool profile::initialize_camera()
 	glLoadIdentity();
 
 	return true;
-}
+}*/
 
-void profile::getKinectFrame(GLubyte* destination)
+/*void profile::getKinectFrame(GLubyte* destination)
 {
 	if (sensor->NuiImageStreamGetNextFrame(rgbStream, 0, &imageFrame) < 0) // retrieve a frame from Kinect
 	{
@@ -160,7 +160,7 @@ void profile::drawKinectFrame()
 	glEnd();
 
 	glutSwapBuffers();
-}
+}*/
 
 profile::~profile()
 {
