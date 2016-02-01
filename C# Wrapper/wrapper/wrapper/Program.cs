@@ -23,13 +23,13 @@ using System.Windows.Forms;
 
 namespace wrapper
 {
-   public class Program
+   public class Answer
     {
         [STAThread]
-        [DllImport("A:\\School\\Spring 2016\\CPE 496\\Code\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
+        [DllImport("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
         public static extern void Steelcase_Answer_Verification(short[] depth_data);
-        static KinectSensor sensor; 
-        static short[] depth_data; // array to hold the depth info provided by Kinect
+        KinectSensor sensor; 
+        short[] depth_data; // array to hold the depth info provided by Kinect
 
         static void Main()
         {
@@ -38,36 +38,48 @@ namespace wrapper
             Application.Run(new Form1());
 
             //short[] depth_data = new short[3] { 0, 1, 2 };
-            retrieveKinectDepth();
-            Steelcase_Answer_Verification(depth_data); // pass the depth data to the C++ DLL
+            Answer instance = new Answer();
+            instance.retrieveKinectDepth();
+            Steelcase_Answer_Verification(instance.depth_data); // pass the depth data to the C++ DLL
         }
 
-        static void retrieveKinectDepth()
+        void retrieveKinectDepth()
         {
             // initialize and start Kinect sensor
             sensor = KinectSensor.KinectSensors[0];
             sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
             sensor.DepthFrameReady += depthFrameReady; // event handler that executes when a frame is ready
-            sensor.Start();
-        }
-
-        static void depthFrameReady(object sender, DepthImageFrameReadyEventArgs depth)
-        {
-            DepthImageFrame frame = depth.OpenDepthImageFrame();
-            if(frame != null)
+            try
             {
-                sensor.Stop();
-                depth_data = new short[frame.PixelDataLength];
-                frame.CopyPixelDataTo(depth_data);
-
-                // for example, find the middle pixel in the frame
-                int x = frame.Width / 2;
-                int y = frame.Height / 2;
-                int d = (ushort)depth_data[x + y * frame.Width];
-                d = d >> 3;
-
-                // d now contains the distance of the pixel from the Kinect in mm
+                sensor.Start();
+            }
+            catch(InvalidOperationException)
+            {
+                sensor = null;
+                Console.WriteLine("ERROR: No Kinect Sensor Found");
             }
         }
+
+        void depthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+            using (DepthImageFrame frame = e.OpenDepthImageFrame())
+             {
+                    if (frame != null)
+                    {
+                        sensor.Stop();
+                        depth_data = new short[frame.PixelDataLength];
+                        frame.CopyPixelDataTo(depth_data);
+
+                        // for example, find the middle pixel in the frame
+                        int x = frame.Width / 2;
+                        int y = frame.Height / 2;
+                        int d = (ushort)depth_data[x + y * frame.Width];
+                        d = d >> 3;
+
+                        // d now contains the distance of the pixel from the Kinect in mm
+                    }
+              } 
+        }
     }
+
 }
