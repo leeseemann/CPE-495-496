@@ -11,6 +11,8 @@ Lee				12/22/15		file created, added initialize() function
 
 
 --------------------------------------------------------------------------------
+TO DO
+Elaine			Camera_calibration, edge detection, pixel count for length
 */
 #include "length.h"
 
