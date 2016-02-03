@@ -30,7 +30,7 @@ namespace wrapper
     {
         // import the C++ DLL 
         [STAThread]
-        [DllImport("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
+        [DllImport("A:\\School\\Spring 2016\\CPE 496\\CodeCPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
 
         public static extern void Steelcase_Answer_Verification(short depth_data); // the function that will call the C++ DLL
 

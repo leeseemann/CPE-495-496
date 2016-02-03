@@ -211,3 +211,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 *.vcxproj
+Code/Steelcase_Answer_Verification.vcxproj
+*.vcxproj
+*.vcxproj
