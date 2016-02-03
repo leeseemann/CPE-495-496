@@ -23,16 +23,16 @@ oracle::occi::Connection* database::connectDatabase(string userName, string pass
 {
 	oracle::occi::Environment *env = oracle::occi::Environment::createEnvironment(); // create Oracle environment
 	oracle::occi::Connection *conn = env->createConnection(userName, password, connectString); // create connection to Oracle database
-
+	
 	return conn;
 }
 
 oracle::occi::ResultSet* database::queryDatabase(oracle::occi::Connection* conn, string query_string)
 {
-	query = conn->createStatement(query_string); // form Oracle database query
-	result = query->executeQuery(); // execute the database query
+		query = conn->createStatement(query_string); // form Oracle database query
+		result = query->executeQuery(); // execute the database query
 
-	return result;
+		return result;
 }
 
 database::~database()

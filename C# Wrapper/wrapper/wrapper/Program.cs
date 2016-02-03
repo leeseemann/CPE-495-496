@@ -8,8 +8,8 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee 			12/28/15		file created, imported C++ DLL
-Lee             1/31/15         added code to retrive Kinect depth info and pass it to DLL
-
+Lee             1/31/16         added code to pass Kinect depth info to DLL
+Lee             2/2/16          added code to retrieve depth data from Kinect
 --------------------------------------------------------------------------------
 */
 
@@ -20,16 +20,22 @@ using System.Threading.Tasks;
 using Microsoft.Kinect;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows;
+using System.Diagnostics;
+using System.Threading;
 
 namespace wrapper
 {
    public class Answer
     {
+        // import the C++ DLL 
         [STAThread]
-        [DllImport("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
-        public static extern void Steelcase_Answer_Verification(short[] depth_data);
+        [DllImport("A:\\School\\Spring 2016\\CPE 496\\CodeCPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
+
+        public static extern void Steelcase_Answer_Verification(short depth_data); // the function that will call the C++ DLL
+
         KinectSensor sensor; 
-        short[] depth_data; // array to hold the depth info provided by Kinect
+        short[] depth_data; // array to hold the depth info provided by the Kinect
 
         static void Main()
         {
@@ -37,18 +43,19 @@ namespace wrapper
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            //short[] depth_data = new short[3] { 0, 1, 2 };
+            short[] data = new short[3] { 0, 1, 2 };
             Answer instance = new Answer();
             instance.retrieveKinectDepth();
-            Steelcase_Answer_Verification(instance.depth_data); // pass the depth data to the C++ DLL
+       //     Steelcase_Answer_Verification(data); // pass the depth data to the C++ DLL
         }
 
         void retrieveKinectDepth()
         {
-            // initialize and start Kinect sensor
+            // initialize and start the Kinect sensor
             sensor = KinectSensor.KinectSensors[0];
             sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
             sensor.DepthFrameReady += depthFrameReady; // event handler that executes when a frame is ready
+            // start the sensor, and abort if there is an issue
             try
             {
                 sensor.Start();
@@ -58,28 +65,32 @@ namespace wrapper
                 sensor = null;
                 Console.WriteLine("ERROR: No Kinect Sensor Found");
             }
+
+            Thread.Sleep(1000);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
         }
 
         void depthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            using (DepthImageFrame frame = e.OpenDepthImageFrame())
+            using (DepthImageFrame frame = e.OpenDepthImageFrame()) // retrieve the frame
              {
                     if (frame != null)
                     {
                         sensor.Stop();
-                        depth_data = new short[frame.PixelDataLength];
-                        frame.CopyPixelDataTo(depth_data);
+                        depth_data = new short[frame.PixelDataLength]; // allocate space to hold the depth data
+                        frame.CopyPixelDataTo(depth_data); // copy the depth data 
 
                         // for example, find the middle pixel in the frame
                         int x = frame.Width / 2;
                         int y = frame.Height / 2;
                         int d = (ushort)depth_data[x + y * frame.Width];
                         d = d >> 3;
-
+                        Console.Write("D: " + d);
                         // d now contains the distance of the pixel from the Kinect in mm
                     }
-              } 
+                Steelcase_Answer_Verification(1); // pass the depth data to the C++ DLL
+            } 
         }
-    }
+
+     }
 
 }

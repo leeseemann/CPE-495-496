@@ -21,7 +21,7 @@ driver::driver()
 {
 }
 
-void driver::startup(short depth_data[])
+void driver::startup(short depth_data)
 {
 	verify_profile.initialize(); // initialize profile verification
 	verify_length.initialize(); // initialize length verification
@@ -35,12 +35,15 @@ void driver::startup(short depth_data[])
 	conn = oracle_db.connectDatabase(userName, password, connectString);
 
 	// query the Oracle database
-	query_string = "select num from data";
-	result_query = oracle_db.queryDatabase(conn, query_string);
-	while (result_query->next())
-		cout << "result: " << result_query->getInt(1) << endl;
+	if (conn != NULL)
+	{
+		query_string = "select num from data";
+		result_query = oracle_db.queryDatabase(conn, query_string);
+		while (result_query->next())
+			cout << "result: " << result_query->getInt(1) << endl;
+	}
 
-	cout << "info: " << depth_data[0];
+	cout << "info: " << depth_data;
 
 	return;
 }

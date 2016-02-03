@@ -28,7 +28,7 @@ Lee				1/31/16			added the parameter depth_data
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.h"
 #include "A:\School\Spring 2016\CPE 496\Code\CPE_Senior_Design\Code\database.cpp"
 
-extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[])
+extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data)
 {
 	driver project_driver;
 	project_driver.startup(depth_data);
