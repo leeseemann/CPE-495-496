@@ -19,6 +19,7 @@ Lee				1/9/16			database class created, added connectDatabase(), queryDatabase()
 #include <stdlib.h>
 #include <string>
 #include <occi.h>
+#include <iostream>
 
 using namespace std;
 
