@@ -26,9 +26,9 @@ Lee				1/25/16			added glut variables/functions to display Kinect frame
 #include <NuiApi.h>
 #include <NuiImageCamera.h>
 #include <NuiSensor.h>
-#include <gl\GL.h>
-#include <gl\GLU.h>
-#include <glut.h>
+//#include <gl\GL.h>
+//#include <gl\GLU.h>
+//#include <glut.h>
 
 // define the size of the Kinect frame
 #define width 640
