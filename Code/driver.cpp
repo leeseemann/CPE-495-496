@@ -21,7 +21,7 @@ driver::driver()
 {
 }
 
-void driver::startup(short depth_data)
+void driver::startup(short depth_data[])
 {
 	verify_profile.initialize(); // initialize profile verification
 	verify_length.initialize(); // initialize length verification
@@ -43,7 +43,7 @@ void driver::startup(short depth_data)
 			cout << "result: " << result_query->getInt(1) << endl;
 	}
 
-	cout << "info: " << depth_data;
+	cout << "info: " << depth_data[0];
 
 	return;
 }
