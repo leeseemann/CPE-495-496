@@ -25,6 +25,6 @@ Lee				1/9/16		file created, moved variable declarations from main.cpp
 using namespace std;
 
 driver project_driver; // driver used by the C# wrapper
-short depth_data = 3;// [3] = { 1,2,3 }; // used for testing purposes
+short depth_data [3] = { 1,2,3 }; // used for testing purposes
 
 #endif
