@@ -11,7 +11,7 @@ Lee				12/22/15		profile class created, added initialize() function
 Lee				1/16/16			added header files for Kinect SDK
 Lee				1/25/16			added Kinect and OpenGL variables/functions for retrieving Kinect frame
 Lee				1/25/16			added glut variables/functions to display Kinect frame
-
+Lee				2/19/16			modified project to utilize OpenCV, used profile.h to test
 --------------------------------------------------------------------------------
 */
 #ifndef PROFILE_H
@@ -26,6 +26,7 @@ Lee				1/25/16			added glut variables/functions to display Kinect frame
 #include <NuiApi.h>
 #include <NuiImageCamera.h>
 #include <NuiSensor.h>
+#include <opencv\cv.h> // test opencv, may not be needed
 //#include <gl\GL.h>
 //#include <gl\GLU.h>
 //#include <glut.h>
