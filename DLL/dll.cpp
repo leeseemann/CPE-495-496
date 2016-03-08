@@ -10,7 +10,7 @@ Developer		Date			Comments
 Lee				12/28/15		file created, created instance of driver class
 Lee				1/9/16			added database.h and database.cpp
 Lee				1/31/16			added the parameter depth_data
-
+Lee				3/8/16			added the parameter color_image
 
 --------------------------------------------------------------------------------
 */
@@ -28,7 +28,7 @@ Lee				1/31/16			added the parameter depth_data
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.h"
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.cpp"
 
-extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[])
+extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[], string color_image)
 {
 	driver project_driver;
 	project_driver.startup(depth_data);

@@ -26,7 +26,7 @@ Lee				2/19/16			modified project to utilize OpenCV, used profile.h to test
 #include <NuiApi.h>
 #include <NuiImageCamera.h>
 #include <NuiSensor.h>
-#include <opencv\cv.h> // test opencv, may not be needed
+//#include <opencv\cv.h> // test opencv, may not be needed
 //#include <gl\GL.h>
 //#include <gl\GLU.h>
 //#include <glut.h>
