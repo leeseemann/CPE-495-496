@@ -27,9 +27,10 @@ Lee				3/8/16			added the parameter color_image
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\quantity.cpp"
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.h"
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.cpp"
+#include <iostream>
 
-extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[], string color_image)
+extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[], string file_path)
 {
 	driver project_driver;
-	project_driver.startup(depth_data);
+	project_driver.startup(depth_data, file_path);
 }

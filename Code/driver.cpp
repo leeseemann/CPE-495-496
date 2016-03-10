@@ -10,6 +10,8 @@ Developer		Date			Comments
 Lee				12/28/15		file created, added startup() function
 Lee				1/9/16			used OCCI to created Oracle database connection, executed test query
 Lee				1/31/16			modified startup() to receive data from C# wrapper
+Lee				3/9/16			added code to allow the path of the color image from the Kinect to be 
+								received from the C# driver
 
 --------------------------------------------------------------------------------
 */
@@ -21,7 +23,7 @@ driver::driver()
 {
 }
 
-void driver::startup(short depth_data[])
+void driver::startup(short depth_data[], string file_path)
 {
 	verify_profile.initialize(); // initialize profile verification
 	verify_length.initialize(); // initialize length verification
@@ -44,6 +46,8 @@ void driver::startup(short depth_data[])
 	}
 
 	cout << "info: " << depth_data[0];
+
+	//cout << "file path: " << file_path << endl;
 
 	return;
 }

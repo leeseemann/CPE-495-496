@@ -8,7 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		quantity class created, added initialize() function
-
+Lee				3/10/16			added bool to track the success of the quantity verification
 
 --------------------------------------------------------------------------------
 */
@@ -25,6 +25,7 @@ class quantity
 public:
 	quantity(); // class constructor
 	void initialize();
+	bool quantity_verified = false;
 	~quantity(); // class destructor 
 };
 

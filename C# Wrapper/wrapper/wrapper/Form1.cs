@@ -16,5 +16,22 @@ namespace wrapper
         {
             InitializeComponent();
         }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            var instance = new Answer();
+            instance.initKinectSensor();
+        }
+
+        private void endButton_Click(object sender, EventArgs e)
+        {
+            var instance = new Answer();
+            instance.terminateVerificationSoftware();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

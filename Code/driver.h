@@ -33,7 +33,7 @@ class driver
 {
 public:
 	driver();
-	void startup(short depth_data[]);
+	void startup(short depth_data[], string file_path);
 	~driver();
 
 	profile verify_profile;

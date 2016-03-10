@@ -26,5 +26,6 @@ using namespace std;
 
 driver project_driver; // driver used by the C# wrapper
 short depth_data [3] = { 1,2,3 }; // used for testing purposes
+string file_path = "test file path";
 
 #endif
