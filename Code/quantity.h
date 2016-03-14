@@ -24,7 +24,7 @@ class quantity
 {
 public:
 	quantity(); // class constructor
-	void initialize();
+	bool initialize();
 	bool quantity_verified = false;
 	~quantity(); // class destructor 
 };

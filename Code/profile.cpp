@@ -11,6 +11,8 @@ Lee				12/22/15		file created, added initialize() function
 Lee				1/25/16			added initialize_Kinect() and getKinectFrame() functions
 Lee				1/25/16			added glut functions to display Kinect frame
 Lee				3/9/16			removed Kinect and glut functions, Kinect code now implemented in C# wrapper
+Lee				3/14/16			modified initialize() to return bool based on success
+
 --------------------------------------------------------------------------------
 */
 #include "profile.h"
@@ -22,11 +24,11 @@ profile::profile()
 
 }
 
-void profile::initialize()
+bool profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
 
-	return;
+	return profile_verified;
 }
 
 profile::~profile()

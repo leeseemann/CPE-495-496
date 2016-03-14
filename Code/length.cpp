@@ -8,7 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		file created, added initialize() function
-
+Lee				3/14/16			modified initialize() to return bool based on success 
 
 --------------------------------------------------------------------------------
 TO DO
@@ -22,10 +22,10 @@ length::length()
 {
 }
 
-void length::initialize()
+bool length::initialize()
 {
 	cout << "Initializing Length Verification Software" << endl;
-	return;
+	return length_verified;
 }
 
 length::~length()

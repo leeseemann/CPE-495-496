@@ -18,6 +18,8 @@ Lee             3/2/16          added code to save color data as a jpg/png file
 Lee             3/7/16          added code to display color image as part of debugging
 Lee             3/8/16          added code to pass the color image file path to the C++ DLL for processing
 Lee             3/10/16         added start/end buttons to form to faciliate execution of the program
+Lee             3/14/16         added code to process the success/failure of the verification
+                                based on an int array received from the C++ DLL
 --------------------------------------------------------------------------------
 */
 
@@ -47,7 +49,7 @@ namespace wrapper
         // import the C++ DLL 
         [STAThread]
         [DllImport("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
-        public static extern void Steelcase_Answer_Verification(short[] depth_data, string file_path); // the function that will call the C++ DLL
+        public static extern IntPtr Steelcase_Answer_Verification(short[] depth_data/*, string file_path*/); // the function that will call the C++ DLL
 
 
         // Variable declarations
@@ -60,12 +62,10 @@ namespace wrapper
         bool color_retrieved = false; // used to determine if we have already retrieved color data for the current order
         public WriteableBitmap color_bitmap; // bitmap to hold the rgb data from the Kinect
         public string file_path;
-      /*  struct data
-        {
-            string file_path;
-            short[] depth_data;
-        }*/
-      //  System.Windows.Controls.Image color_image = new System.Windows.Controls.Image();
+        IntPtr ptr;
+        int[] results = new int[5];
+
+        //  System.Windows.Controls.Image color_image = new System.Windows.Controls.Image();
 
         /// <summary>
         /// Main() creates an instance of the Answer class and kickstarts the verification process
@@ -75,13 +75,14 @@ namespace wrapper
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
             System.Windows.Forms.Application.Run(new Form1());
-
+            
             Answer instance = new Answer();
-           // instance.initKinectSensor();
+            instance.initKinectSensor();
             instance.retrieveKinectDepth();
             instance.retrieveKinectColor();
 
-            Steelcase_Answer_Verification(instance.depth_data, instance.file_path); // pass the averaged depth data and color image to the C++ DLL
+           // instance.results = Steelcase_Answer_Verification(instance.depth_data, instance.file_path); // pass the averaged depth data and color image to the C++ DLL
+           // instance.processResults(instance.results);
         }
 
         /// <summary>
@@ -104,12 +105,13 @@ namespace wrapper
                 Console.WriteLine("ERROR: Kinect Not Initialized");
                 System.Windows.Forms.Application.Exit();
             }
+            //retrieveKinectDepth(sensor);
         }
 
         /// <summary>
         /// retrieveKinectData() initializes the Kinect sensor in order to begin the data retrieval process
         /// </summary>
-        void retrieveKinectDepth()
+        public void retrieveKinectDepth()
         {   
                 // Initialize the depth sensor
                 sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
@@ -129,6 +131,8 @@ namespace wrapper
                 Thread.Sleep(10);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
                 while (frame_count < NUM_FRAMES) ; // wait until a sufficient number of frames have been retrieved
                 Console.WriteLine("Kinect Depth Data Successfully Retrieved");
+                retrieveKinectColor();
+
         }
 
         /// <summary>
@@ -150,8 +154,12 @@ namespace wrapper
                 sensor = null;
                 Console.WriteLine("ERROR: No Kinect Sensor Found");
             }
-
+            
             while (color_retrieved == false) ;
+
+            ptr = Steelcase_Answer_Verification(depth_data);//, file_path); // pass the averaged depth data and color image to the C++ DLL
+            Marshal.Copy(ptr, results, 0, 5);
+            processResults(results);
         }
 
         /// <summary>
@@ -211,7 +219,7 @@ namespace wrapper
                         color_bitmap = new WriteableBitmap(sensor.ColorStream.FrameHeight, sensor.ColorStream.FrameWidth, 96.0, 96.0, PixelFormats.Bgr32, null); // create a bitmap to hold the color data
                         try
                         {
-                            color_bitmap.WritePixels(new Int32Rect(0, 0, color_bitmap.PixelWidth, color_bitmap.PixelHeight), color_data, color_bitmap.PixelWidth * sizeof(int), 0); // write the color data to the bitmap
+                           // color_bitmap.WritePixels(new Int32Rect(0, 0, color_bitmap.PixelWidth, color_bitmap.PixelHeight), color_data, color_bitmap.PixelWidth * sizeof(int), 0); // write the color data to the bitmap
                         }
                         catch(IOException)
                         {
@@ -280,6 +288,41 @@ namespace wrapper
             {
                 Console.WriteLine("ERROR: Failed to save Kinect snapshot");
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="results"></param>
+        public void processResults(int[] results)
+        {
+            if (results[4] == 5)
+            {
+                // order correct
+            }
+            else
+            {
+                if (results[0] == 1)
+                {
+                    //wrong profile
+                }
+                if (results[1] == 2)
+                {
+                    // wrong length
+                }
+                if (results[2] == 3)
+                {
+                    // wrong color
+                }
+                if (results[3] == 4)
+                {
+                    // wrong quantity
+                }
+
+            }
+
+
+
         }
 
         /// <summary>

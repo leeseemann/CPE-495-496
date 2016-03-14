@@ -25,7 +25,7 @@ class color
 {
 public:
 	color(); // class constructor
-	void initialize();
+	bool initialize();
 	bool color_verified = false;
 	~color(); // class destructor 
 };

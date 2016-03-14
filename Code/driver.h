@@ -10,6 +10,8 @@ Developer		Date			Comments
 Lee				12/28/15		driver class created, added startup() function
 Lee				1/9/16			added OCCI and database connection variables, 
 Lee				1/31/16			modified startup() to receive data from C# wrapper
+Lee				3/14/16			added bools and enum to determine the success/failure of the
+								verification, and pass this info back to the C# wrapper
 
 --------------------------------------------------------------------------------
 */
@@ -33,13 +35,21 @@ class driver
 {
 public:
 	driver();
-	void startup(short depth_data[], string file_path);
+	int* startup(short depth_data[]/*, string file_path*/);
 	~driver();
 
 	profile verify_profile;
 	length verify_length;
 	color verify_color;
 	quantity verify_quantity;
+	enum options:int{wrong_profile = 1, wrong_length = 2, wrong_color = 3, wrong_quantity = 4, correct = 5};
+
+	int results[4];
+
+	bool is_profile_correct;
+	bool is_length_correct;
+	bool is_color_correct;
+	bool is_quantity_correct;
 
 	string userName;
 	string password;

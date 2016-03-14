@@ -31,6 +31,8 @@
             this.startButton = new System.Windows.Forms.Button();
             this.endButton = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // startButton
@@ -39,7 +41,7 @@
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(180, 47);
             this.startButton.TabIndex = 0;
-            this.startButton.Text = "Start Verification";
+            this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
@@ -49,7 +51,7 @@
             this.endButton.Name = "endButton";
             this.endButton.Size = new System.Drawing.Size(180, 47);
             this.endButton.TabIndex = 1;
-            this.endButton.Text = "End Verification";
+            this.endButton.Text = "End";
             this.endButton.UseVisualStyleBackColor = true;
             this.endButton.Click += new System.EventHandler(this.endButton_Click);
             // 
@@ -62,12 +64,27 @@
             this.textBox1.Text = "Steelcase Answer Verification Software";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(249, 250);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(276, 37);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Verification Status";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(874, 594);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.endButton);
             this.Controls.Add(this.startButton);
@@ -83,6 +100,8 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button endButton;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

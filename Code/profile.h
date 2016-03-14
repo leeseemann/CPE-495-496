@@ -38,8 +38,9 @@ class profile
 public:
 	profile(); // class constructor
 
-	void initialize();
+	bool initialize();
 	bool profile_verified = false;
+	
 	~profile(); // class destructor 
 
 

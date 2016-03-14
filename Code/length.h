@@ -25,7 +25,7 @@ class length
 {
 public:
 	length(); // class constructor
-	void initialize();
+	bool initialize();
 	bool length_verified = false;
 	~length(); // class destructor 
 };
