@@ -14,6 +14,7 @@ Lee				1/25/16			added glut variables/functions to display Kinect frame
 Lee				2/19/16			modified project to utilize OpenCV, used profile.h to test
 Lee				3/10/16			added bool to track the success of the profile verification
 Jacob/Lee		3/15/16			implemented edge detection software
+Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color using hsv color space 
 --------------------------------------------------------------------------------
 */
 #ifndef PROFILE_H
@@ -46,20 +47,17 @@ public:
 
 	bool initialize();
 	void edgeDetection();
-	void cannyThreshold(int, void*);
 	bool profile_verified = false;
 
-	Mat source, source_gray;
-	Mat destination, detected_edges;
+	Mat image; // the original image before edge detection
+	Mat destination; // the final data after edge detection
 	Mat hsv;
-	vector<Mat> hsv_channels;
-	Mat hsv_H, hsv_S, hsv_V;
+	vector<Mat> hsv_channels; // vector containing the three channels of data in the HSV color space
+	Mat hsv_H, hsv_S, hsv_V; 
+	Mat shifted_H, canny_H;
+	int shift_amount; // the amount the Hue space was shifted
 	char* window_name = "Edge Detection";
-	int edge_thresh = 1;
-	int low_threshold;
-	int const max_low_threshold = 100;
-	int ratio = 3;
-	int kernel_size = 3;
+	char* file_name;
 
 	
 	~profile(); // class destructor 

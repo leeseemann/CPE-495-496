@@ -15,6 +15,7 @@ namespace wrapper
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -34,9 +35,9 @@ namespace wrapper
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e) // Profile
         {
-            label2.BackColor = Color.Green;
+            
         }
     }
 }

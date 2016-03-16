@@ -17,7 +17,7 @@ Lee             3/2/16          added code to save color data as a jpg/png file
                                 in order to access it from the c++ edge detection code
 Lee             3/7/16          added code to display color image as part of debugging
 Lee             3/8/16          added code to pass the color image file path to the C++ DLL for processing
-Lee             3/10/16         added start/end buttons to form to faciliate execution of the program
+Lee             3/10/16         added start/end buttons to the GUI to faciliate execution of the program
 Lee             3/14/16         added code to process the success/failure of the verification
                                 based on an int array received from the C++ DLL
 --------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ namespace wrapper
             instance.initKinectSensor();
             instance.retrieveKinectDepth();
             instance.retrieveKinectColor();
+            
 
            // instance.results = Steelcase_Answer_Verification(instance.depth_data, instance.file_path); // pass the averaged depth data and color image to the C++ DLL
            // instance.processResults(instance.results);
@@ -291,14 +292,14 @@ namespace wrapper
         }
 
         /// <summary>
-        /// 
+        /// processResults() utlizes an array received from the C++ DLL to alert the user to the success/failure of the verification
         /// </summary>
         /// <param name="results"></param>
         public void processResults(int[] results)
         {
             if (results[4] == 5)
             {
-                // order correct
+               // if order is correct
             }
             else
             {
@@ -331,6 +332,7 @@ namespace wrapper
         public void terminateVerificationSoftware()
         {
             Console.WriteLine("Verification Software Terminated");
+            
         }
      }
 
