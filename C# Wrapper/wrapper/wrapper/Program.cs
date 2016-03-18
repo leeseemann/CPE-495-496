@@ -61,11 +61,9 @@ namespace wrapper
         public byte[] color_data; // array to hold the color info provided by the Kinect
         bool color_retrieved = false; // used to determine if we have already retrieved color data for the current order
         public WriteableBitmap color_bitmap; // bitmap to hold the rgb data from the Kinect
-        public string file_path;
-        IntPtr ptr;
-        int[] results = new int[5];
-
-        //  System.Windows.Controls.Image color_image = new System.Windows.Controls.Image();
+        public string file_path; // path of the color image file that will be passed to DLL for edge detection
+        IntPtr dll_ptr; // pointer used to retrieve results from the dll
+        int[] results = new int[5]; // holds the ints that indicate the success/failure of each verification component
 
         /// <summary>
         /// Main() creates an instance of the Answer class and kickstarts the verification process
@@ -80,10 +78,7 @@ namespace wrapper
             instance.initKinectSensor();
             instance.retrieveKinectDepth();
             instance.retrieveKinectColor();
-            
 
-           // instance.results = Steelcase_Answer_Verification(instance.depth_data, instance.file_path); // pass the averaged depth data and color image to the C++ DLL
-           // instance.processResults(instance.results);
         }
 
         /// <summary>
@@ -158,8 +153,8 @@ namespace wrapper
             
             while (color_retrieved == false) ;
 
-            ptr = Steelcase_Answer_Verification(depth_data);//, file_path); // pass the averaged depth data and color image to the C++ DLL
-            Marshal.Copy(ptr, results, 0, 5);
+            dll_ptr = Steelcase_Answer_Verification(depth_data);//, file_path); // pass the averaged depth data and color image to the C++ DLL
+            Marshal.Copy(dll_ptr, results, 0, 5);
             processResults(results);
         }
 
@@ -321,9 +316,6 @@ namespace wrapper
                 }
 
             }
-
-
-
         }
 
         /// <summary>
