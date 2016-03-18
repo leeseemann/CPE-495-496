@@ -10,7 +10,8 @@ Developer		Date			Comments
 Lee				12/28/15		file created, created instance of driver class
 Lee				1/9/16			added database.h and database.cpp
 Lee				1/31/16			added the parameter depth_data
-
+Lee				3/8/16			added the parameter color_image
+Lee				3/14/16			added int* to pass the success/failure array to the C# wrapper
 
 --------------------------------------------------------------------------------
 */
@@ -27,9 +28,12 @@ Lee				1/31/16			added the parameter depth_data
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\quantity.cpp"
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.h"
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.cpp"
+#include <iostream>
 
-extern "C" __declspec(dllexport) void Steelcase_Answer_Verification(short depth_data[])
+extern "C" __declspec(dllexport) int* Steelcase_Answer_Verification(short depth_data[]/*, string file_path*/)
 {
 	driver project_driver;
-	project_driver.startup(depth_data);
+	int* results;
+	results = project_driver.startup(depth_data/*, file_path*/);
+	return results;
 }

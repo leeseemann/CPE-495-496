@@ -8,7 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		file created, added initialize() function
-
+Lee				3/14/16			modified initialize() to return bool based on success
 
 --------------------------------------------------------------------------------
 */
@@ -20,10 +20,10 @@ quantity::quantity()
 {
 }
 
-void quantity::initialize()
+bool quantity::initialize()
 {
 	cout << "Initializing Quantity Verification Software" << endl;
-	return;
+	return quantity_verified;
 }
 
 quantity::~quantity()

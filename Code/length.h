@@ -8,6 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		length class created, added initialize() function
+Lee				3/10/16			added bool to track the success of the length verification
 
 
 --------------------------------------------------------------------------------
@@ -24,7 +25,8 @@ class length
 {
 public:
 	length(); // class constructor
-	void initialize();
+	bool initialize();
+	bool length_verified = false;
 	~length(); // class destructor 
 };
 

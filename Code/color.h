@@ -8,6 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		color class created, added initialize() function
+Lee				3/10/16			added bool to track the success of the color verification
 
 
 --------------------------------------------------------------------------------
@@ -24,7 +25,8 @@ class color
 {
 public:
 	color(); // class constructor
-	void initialize();
+	bool initialize();
+	bool color_verified = false;
 	~color(); // class destructor 
 };
 

@@ -16,9 +16,10 @@ using namespace std;
 
 #include "main.h"
 
+/// main() is only necessary when the C++ code is run in isolation, when the C# driver is used main() is bypassed
 int main()
 {
-	project_driver.startup(depth_data);
+	project_driver.startup(depth_data/*, file_path*/);
 	cin.get(); // allows the output of the program to be viewed
 	return 0;
 }

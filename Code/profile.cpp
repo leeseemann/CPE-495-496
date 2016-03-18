@@ -10,6 +10,10 @@ Developer		Date			Comments
 Lee				12/22/15		file created, added initialize() function
 Lee				1/25/16			added initialize_Kinect() and getKinectFrame() functions
 Lee				1/25/16			added glut functions to display Kinect frame
+Lee				3/9/16			removed Kinect and glut functions, Kinect code now implemented in C# wrapper
+Lee				3/14/16			modified initialize() to return bool based on success
+Jacob/Lee		3/15/16			implemented edge detection software
+Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color using hsv color space
 --------------------------------------------------------------------------------
 */
 #include "profile.h"
@@ -21,146 +25,60 @@ profile::profile()
 
 }
 
-void profile::initialize()
+bool profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
+	edgeDetection();
+
+	return profile_verified;
+}
+
+
+// The edgeDetection() function performs Canny edge detection of an image containing the Answer component using the HSV color space
+void profile::edgeDetection()
+{
 	
-	/*init_glut = initialize_glut();
-	if (init_glut == false)
-		cout << "ERROR: GLUT not initialized" << endl;
-	else
-		cout << "Initializing GLUT Software" << endl;
-
-	init_Kinect = initialize_Kinect();
-	if (init_Kinect == false)
-		cout << "ERROR: Kinect not initialized" << endl;
-	else
-		cout << "Initializing Kinect Sensor" << endl;
-
-	init_camera = initialize_camera();
-	if (init_camera == false)
-		cout << "ERROR: Camera not initialized" << endl;
-	else
-		cout << "Initializing Camera" << endl;
-
-	glutMainLoop(); // glut function that calls draw_wrapper*/
-
-	return;
-}
-
-/*bool profile::initialize_Kinect()
-{
-	int numSensors;
-	if (NuiGetSensorCount(&numSensors) < 0 || numSensors < 1) // determine if a Kinect is attached and running
+	file_name = "C:\\Users\\Lee Seemann\\Desktop\\KinectSnapshot.png";
+	image = imread(file_name); // load an image for processing
+	
+	if (!image.data) // if the image in invalid, exit the software
 	{
-		cout << "ERROR: No Kinect Found" << endl;
-		return false;
-	}
-	if (NuiCreateSensorById(0, &sensor) < 0)
-	{
-		cout << "ERROR: Kinect Sensor Uninitialized" << endl;
-		return false;
-	}
-
-	// initialize sensor
-	sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_DEPTH | NUI_INITIALIZE_FLAG_USES_COLOR); // initialize the Kinect and specify depth/color as flags
-	sensor->NuiImageStreamOpen(
-		NUI_IMAGE_TYPE_COLOR,          // depth or rgb camera
-		NUI_IMAGE_RESOLUTION_640x480,  // image resolution
-		0,							   // image stream flags
-		2,							   // number of frames to buffer
-		NULL,						   // event handler
-		&rgbStream);
-
-	return sensor;
-}*/
-
-/*bool profile::initialize_glut()
-{
-	instance = this;
-	glutInit(&myargc, myargv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(width, height);
-	glutCreateWindow("Kinect Image");
-	glutDisplayFunc(draw_wrapper);
-	glutIdleFunc(draw_wrapper);
-	return true;
-}
-
-bool profile::initialize_camera()
-{
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
-		0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glClearColor(0, 0, 0, 0);
-	glClearDepth(1.0f);
-	glEnable(GL_TEXTURE_2D);
-
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, width, height, 0, 1, -1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	return true;
-}*/
-
-/*void profile::getKinectFrame(GLubyte* destination)
-{
-	if (sensor->NuiImageStreamGetNextFrame(rgbStream, 0, &imageFrame) < 0) // retrieve a frame from Kinect
-	{
-		cout << "ERROR: Failed to Retrieve Kinect Frame" << endl;
+		cout << "ERROR: No image loaded for edge detection";
+		profile_verified = false;
 		return;
 	}
 
-	texture = imageFrame.pFrameTexture;
-	texture->LockRect(0, &lockedRect, NULL, 0); // lock the frame
+	cvtColor(image, hsv, CV_BGR2HSV);  // convert image color to hsv format
+	
+	// separate the hsv data into 3 channels (Hue-H, Saturation-S, Value-V)
+	split(hsv, hsv_channels);  
+	hsv_H = hsv_channels[0];
+	hsv_S = hsv_channels[1];
+	hsv_V = hsv_channels[2];
 
-	if (lockedRect.Pitch != 0) // check to see if there is data in the frame
-	{
-		current = (const unsigned char*)lockedRect.pBits;
-		dataEnd = current + (width*height) * 4;
+	// Hue space is a circular/angular value meaning the highest and lowest value are very close together
+	// This can result in bright artifacts at the edges of an object, we shift the entire Hue space to overcome this
+	shifted_H = hsv_H.clone();
+	shift_amount = 25;
 
-		while (current < dataEnd) // iterate through the frame
+	for (int i = 0; i < shifted_H.rows; i++)
+		for (int j = 0; j < shifted_H.cols; j++)
 		{
-			*destination++ = *current++;
+			shifted_H.at<unsigned char>(i, j) = (shifted_H.at<unsigned char>(i, j) + shift_amount) % 180;
 		}
-	}
 
-	texture->UnlockRect(0); // unlock the frame
-	sensor->NuiImageStreamReleaseFrame(rgbStream, &imageFrame); // release the frame
+	// Perform canny edge detection
+	Canny(shifted_H, canny_H, 100, 50);
+
+	// display the results of the edge detection
+	destination = Scalar::all(0);
+	image.copyTo(destination, canny_H);
+	imshow(window_name, destination);
+
+	waitKey(0); 
+
+	return;
 }
-
-void profile::draw_wrapper()
-{
-	instance->drawKinectFrame();
-}
-
-void profile::drawKinectFrame()
-{
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	getKinectFrame(data);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (GLvoid*)data);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(0, 0, 0);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(width, 0, 0);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(width, height, 0.0f);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(0, height, 0.0f);
-	glEnd();
-
-	glutSwapBuffers();
-}*/
 
 profile::~profile()
 {

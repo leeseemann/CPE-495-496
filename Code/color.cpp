@@ -8,7 +8,7 @@ Modification History
 Developer		Date			Comments
 --------------------------------------------------------------------------------
 Lee				12/22/15		file created, added initialize() function
-
+Lee				3/14/16			modified initialize() to return bool based on success
 
 --------------------------------------------------------------------------------
 */
@@ -20,10 +20,10 @@ color::color()
 {
 }
 
-void color::initialize()
+bool color::initialize()
 {
 	cout << "Initializing Color Verification Software" << endl;
-	return;
+	return color_verified;
 }
 
 color::~color()
