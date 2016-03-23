@@ -20,6 +20,7 @@ Lee             3/8/16          added code to pass the color image file path to 
 Lee             3/10/16         added start/end buttons to the GUI to faciliate execution of the program
 Lee             3/14/16         added code to process the success/failure of the verification
                                 based on an int array received from the C++ DLL
+Lee             3/23/16         added code to update the GUI based on the success/failure of the verification
 --------------------------------------------------------------------------------
 */
 
@@ -49,11 +50,11 @@ namespace wrapper
         // import the C++ DLL 
         [STAThread]
         [DllImport("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\DLL\\x64\\Debug\\Steelcase_Answer_Verification_DLL.dll")]
-        public static extern IntPtr Steelcase_Answer_Verification(short[] depth_data/*, string file_path*/); // the function that will call the C++ DLL
+        public static extern IntPtr Steelcase_Answer_Verification(short[] depth_data); // the function that will call the C++ DLL
 
 
         // Variable declarations
-        public const short NUM_FRAMES = 2; // number of depth frames to average together before sending depth data to DLL
+        public const short NUM_FRAMES = 1; // number of depth frames to average together before sending depth data to DLL
         public int frame_count = 0; // tracks the number of frames that have been retrieved for the current order
         public List<short[]> depth_frames = new List<short[]>(); // list to hold multiple frames of depth data until they can be averaged
         KinectSensor sensor; // the Kinect sensor
@@ -61,9 +62,10 @@ namespace wrapper
         public byte[] color_data; // array to hold the color info provided by the Kinect
         bool color_retrieved = false; // used to determine if we have already retrieved color data for the current order
         public WriteableBitmap color_bitmap; // bitmap to hold the rgb data from the Kinect
-        public string file_path; // path of the color image file that will be passed to DLL for edge detection
+        public string file_path; // path of the color image file
         IntPtr dll_ptr; // pointer used to retrieve results from the dll
         int[] results = new int[5]; // holds the ints that indicate the success/failure of each verification component
+        public bool continue_verification = false;
 
         /// <summary>
         /// Main() creates an instance of the Answer class and kickstarts the verification process
@@ -72,14 +74,35 @@ namespace wrapper
         {
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new Form1());
+            Form1 GUI = new Form1();
+           // System.Windows.Forms.Application.Run(GUI);
+            GUI.ShowDialog();
+            
             
             Answer instance = new Answer();
             instance.initKinectSensor();
             instance.retrieveKinectDepth();
             instance.retrieveKinectColor();
 
+   //         System.Windows.Forms.Application.Run(GUI);
+   //         instance.processResults(instance.results, GUI);
+
         }
+
+       /* public void driver()
+        {
+           // while (continue_verification == false) ;
+            
+           // if(continue_verification == true)
+           // {
+                initKinectSensor();
+                retrieveKinectDepth();
+                retrieveKinectColor();
+             //   continue_verification = false;
+             //   driver();
+            //}
+
+        }*/
 
         /// <summary>
         /// initKinectSensor() connects to an available Kinect sensor
@@ -127,7 +150,7 @@ namespace wrapper
                 Thread.Sleep(10);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
                 while (frame_count < NUM_FRAMES) ; // wait until a sufficient number of frames have been retrieved
                 Console.WriteLine("Kinect Depth Data Successfully Retrieved");
-                retrieveKinectColor();
+             //   retrieveKinectColor();
 
         }
 
@@ -153,9 +176,10 @@ namespace wrapper
             
             while (color_retrieved == false) ;
 
-            dll_ptr = Steelcase_Answer_Verification(depth_data);//, file_path); // pass the averaged depth data and color image to the C++ DLL
+            dll_ptr = Steelcase_Answer_Verification(depth_data); // pass the averaged depth data and color image to the C++ DLL
             Marshal.Copy(dll_ptr, results, 0, 5);
-            processResults(results);
+            //return results;
+            //processResults(results);
         }
 
         /// <summary>
@@ -172,19 +196,16 @@ namespace wrapper
                 {
                     if (depth_frame != null) // check for an invalid frame
                     {
-                        Console.WriteLine("here");
                         sensor.Stop(); // temporarily disable the Kinect sensor
                         depth_data = new short[depth_frame.PixelDataLength]; // allocate space to hold the depth data
                         depth_frame.CopyPixelDataTo(depth_data); // copy the depth data to the array
                         depth_frames.Add(depth_data); // add the depth data to the list of frames   
-                        Console.WriteLine("here2");
                     }
 
                     frame_count++; // increment the number of frames that have been retrieved
                   
                     if (frame_count == NUM_FRAMES) // if we have all the frames we need
                     {
-                        Console.WriteLine("here3");
                         sensor.Stop();
                         depth_data = averageKinectDepth(depth_frames); // average the depth data from all the frames retrieved
                         return;
@@ -287,34 +308,41 @@ namespace wrapper
         }
 
         /// <summary>
-        /// processResults() utlizes an array received from the C++ DLL to alert the user to the success/failure of the verification
+        ///  processResults() utlizes an array received from the C++ DLL to alert the user to the success/failure of the verification
         /// </summary>
-        /// <param name="results"></param>
-        public void processResults(int[] results)
+        /// <param name="results"></param> the array containing the results of the verification process
+        /// <param name="GUI"></param> the GUI that is displayed to the user
+        public void processResults(int[] results, Form1 GUI)
         {
-            if (results[4] == 5)
+            if (results[4] == 5) // if the order is correct, all verification components must have been successful
             {
-               // if order is correct
+               GUI.profileStatus_Success(null, null);
+               GUI.lengthStatus_Success(null, null);
+               GUI.colorStatus_Success(null, null);
+               GUI.quantityStatus_Success(null, null);
             }
+            // if the order was not correct, determine which verification process failed
             else
             {
-                if (results[0] == 1)
-                {
-                    //wrong profile
-                }
-                if (results[1] == 2)
-                {
-                    // wrong length
-                }
-                if (results[2] == 3)
-                {
-                    // wrong color
-                }
-                if (results[3] == 4)
-                {
-                    // wrong quantity
-                }
+                if (results[0] == 1) // if profile verification failed
+                    GUI.profileStatus_Failure(null, null);
+                else // if profile verification failed
+                    GUI.profileStatus_Success(null, null);
 
+                if (results[1] == 2) // if length verification failed
+                    GUI.lengthStatus_Failure(null, null);
+                else // if length verification succeeded
+                    GUI.lengthStatus_Success(null, null);
+
+                if (results[2] == 3) // if color verification failed
+                    GUI.colorStatus_Failure(null, null);
+                else // if color verification succeeded
+                    GUI.colorStatus_Success(null, null);
+
+                if (results[3] == 4) // if quantity verification failed
+                    GUI.quantityStatus_Failure(null, null);
+                else // if quantity verification succeeded
+                    GUI.quantityStatus_Success(null, null);
             }
         }
 

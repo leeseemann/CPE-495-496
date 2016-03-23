@@ -26,7 +26,7 @@ driver::driver()
 {
 }
 
-int* driver::startup(short depth_data[]/*, string file_path*/)
+int* driver::startup(short depth_data[])
 {
 	// connect to Oracle database
 	userName = "hr";

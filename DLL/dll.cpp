@@ -30,10 +30,10 @@ Lee				3/14/16			added int* to pass the success/failure array to the C# wrapper
 #include "C:\Users\Lee Seemann\Documents\GitHub\CPE_Senior_Design\Code\database.cpp"
 #include <iostream>
 
-extern "C" __declspec(dllexport) int* Steelcase_Answer_Verification(short depth_data[]/*, string file_path*/)
+extern "C" __declspec(dllexport) int* Steelcase_Answer_Verification(short depth_data[])
 {
 	driver project_driver;
 	int* results;
-	results = project_driver.startup(depth_data/*, file_path*/);
+	results = project_driver.startup(depth_data);
 	return results;
 }

@@ -35,9 +35,10 @@ class driver
 {
 public:
 	driver();
-	int* startup(short depth_data[]/*, string file_path*/);
+	int* startup(short depth_data[]);
 	~driver();
 
+	string file_path; // set this to a constant value that will always hold the location of the color image for processing
 	profile verify_profile;
 	length verify_length;
 	color verify_color;

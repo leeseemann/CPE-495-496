@@ -33,10 +33,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.profileStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lengthStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.colorStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.quantityStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,16 +59,7 @@
             this.endButton.Text = "End";
             this.endButton.UseVisualStyleBackColor = true;
             this.endButton.Click += new System.EventHandler(this.endButton_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(190, 84);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(392, 26);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "Steelcase Answer Verification Software";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+
             // 
             // label1
             // 
@@ -81,40 +72,40 @@
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
-            this.toolStripStatusLabel3,
-            this.toolStripStatusLabel4});
+            this.profileStatus,
+            this.lengthStatus,
+            this.colorStatus,
+            this.quantityStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 564);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(874, 30);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // profileStatus
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(62, 25);
-            this.toolStripStatusLabel1.Text = "Profile";
-            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+            this.profileStatus.Name = "profileStatus";
+            this.profileStatus.Size = new System.Drawing.Size(62, 25);
+            this.profileStatus.Text = "Profile";
+            this.profileStatus.Click += new System.EventHandler(this.statusLabel_Click);
             // 
-            // toolStripStatusLabel2
+            // lengthStatus
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(66, 25);
-            this.toolStripStatusLabel2.Text = "Length";
+            this.lengthStatus.Name = "lengthStatus";
+            this.lengthStatus.Size = new System.Drawing.Size(66, 25);
+            this.lengthStatus.Text = "Length";
             // 
-            // toolStripStatusLabel3
+            // colorStatus
             // 
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(55, 25);
-            this.toolStripStatusLabel3.Text = "Color";
+            this.colorStatus.Name = "colorStatus";
+            this.colorStatus.Size = new System.Drawing.Size(55, 25);
+            this.colorStatus.Text = "Color";
             // 
-            // toolStripStatusLabel4
+            // quantityStatus
             // 
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(80, 25);
-            this.toolStripStatusLabel4.Text = "Quantity";
+            this.quantityStatus.Name = "quantityStatus";
+            this.quantityStatus.Size = new System.Drawing.Size(80, 25);
+            this.quantityStatus.Text = "Quantity";
             // 
             // Form1
             // 
@@ -142,10 +133,10 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel profileStatus;
+        private System.Windows.Forms.ToolStripStatusLabel lengthStatus;
+        private System.Windows.Forms.ToolStripStatusLabel colorStatus;
+        private System.Windows.Forms.ToolStripStatusLabel quantityStatus;
     }
 }
 
