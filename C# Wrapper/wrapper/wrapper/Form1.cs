@@ -100,7 +100,7 @@ namespace wrapper
         /// <param name="e"></param>
         public void lengthStatus_Success(object sender, EventArgs e) 
         {
-            profileStatus.BackColor = Color.Green;
+            lengthStatus.BackColor = Color.Green;
             Console.WriteLine("Length Verification Succeeded");
         }
 
@@ -111,7 +111,7 @@ namespace wrapper
         /// <param name="e"></param>
         public void lengthStatus_Failure(object sender, EventArgs e) 
         {
-            profileStatus.BackColor = Color.Red;
+            lengthStatus.BackColor = Color.Red;
             Console.WriteLine("Length Verification Failed");
         }
 
@@ -122,7 +122,7 @@ namespace wrapper
         /// <param name="e"></param>
         public void colorStatus_Success(object sender, EventArgs e) 
         {
-            profileStatus.BackColor = Color.Green;
+            colorStatus.BackColor = Color.Green;
             Console.WriteLine("Color Verification Succeeded");
         }
 
@@ -133,7 +133,7 @@ namespace wrapper
         /// <param name="e"></param>
         public void colorStatus_Failure(object sender, EventArgs e)
         {
-            profileStatus.BackColor = Color.Red;
+            colorStatus.BackColor = Color.Red;
             Console.WriteLine("Color Verification Failed");
         }
 
@@ -144,7 +144,7 @@ namespace wrapper
         /// <param name="e"></param>
         public void quantityStatus_Success(object sender, EventArgs e)
         {
-            profileStatus.BackColor = Color.Green;
+            quantityStatus.BackColor = Color.Green;
             Console.WriteLine("Quantity Verification Succeeded");
         }
 
@@ -155,8 +155,9 @@ namespace wrapper
         /// <param name="e"></param>
         public void quantityStatus_Failure(object sender, EventArgs e)
         {
-            profileStatus.BackColor = Color.Red;
+            quantityStatus.BackColor = Color.Red;
             Console.WriteLine("Quantity Verification Failed");
         }
+
     }
 }

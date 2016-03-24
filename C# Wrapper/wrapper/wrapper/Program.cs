@@ -64,7 +64,7 @@ namespace wrapper
         public WriteableBitmap color_bitmap; // bitmap to hold the rgb data from the Kinect
         public string file_path; // path of the color image file
         IntPtr dll_ptr; // pointer used to retrieve results from the dll
-        int[] results = new int[5]; // holds the ints that indicate the success/failure of each verification component
+        int[] results = new int[5] {1, 2, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component
         public bool continue_verification = false;
 
         /// <summary>
@@ -80,9 +80,12 @@ namespace wrapper
             
             
             Answer instance = new Answer();
-            instance.initKinectSensor();
-            instance.retrieveKinectDepth();
-            instance.retrieveKinectColor();
+            instance.processResults(instance.results, GUI);
+
+            GUI.ShowDialog();
+        //    instance.initKinectSensor();
+        //    instance.retrieveKinectDepth();
+        //    instance.retrieveKinectColor();
 
    //         System.Windows.Forms.Application.Run(GUI);
    //         instance.processResults(instance.results, GUI);
@@ -314,6 +317,12 @@ namespace wrapper
         /// <param name="GUI"></param> the GUI that is displayed to the user
         public void processResults(int[] results, Form1 GUI)
         {
+            Console.WriteLine(results[0]);
+            Console.WriteLine(results[1]);
+            Console.WriteLine(results[2]);
+            Console.WriteLine(results[3]);
+            Console.WriteLine(results[4]);
+
             if (results[4] == 5) // if the order is correct, all verification components must have been successful
             {
                GUI.profileStatus_Success(null, null);
@@ -330,7 +339,10 @@ namespace wrapper
                     GUI.profileStatus_Success(null, null);
 
                 if (results[1] == 2) // if length verification failed
+                {
                     GUI.lengthStatus_Failure(null, null);
+                    Console.WriteLine("here");
+                }
                 else // if length verification succeeded
                     GUI.lengthStatus_Success(null, null);
 

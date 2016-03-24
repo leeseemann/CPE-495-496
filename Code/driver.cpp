@@ -15,7 +15,7 @@ Lee				3/9/16			added code to allow the path of the color image from the Kinect 
 Lee				3/14/16			added code to populate an array based on the success/failure of each
 								verification algorithm, this array tells the C# wrapper what is wrong 
 								with the order if an issue is found
-
+Lee				3/24/16			added code needed to print info to a file if needed
 --------------------------------------------------------------------------------
 */
 #include "driver.h"
@@ -28,6 +28,7 @@ driver::driver()
 
 int* driver::startup(short depth_data[])
 {
+	printDataToFile(depth_data);
 	// connect to Oracle database
 	userName = "hr";
 	password = "uah";
@@ -73,6 +74,14 @@ int* driver::startup(short depth_data[])
 		results[3] = correct;
 
 	return results;
+}
+
+void driver::printDataToFile(short data[])
+{
+	ofstream data_file;
+	data_file.open("depth_data.txt");
+	data_file << data[0] << endl;
+	data_file.close();
 }
 
 driver::~driver()

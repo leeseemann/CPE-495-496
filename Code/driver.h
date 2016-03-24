@@ -28,6 +28,7 @@ Lee				3/14/16			added bools and enum to determine the success/failure of the
 #include <iomanip>
 #include <stdlib.h>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -36,6 +37,7 @@ class driver
 public:
 	driver();
 	int* startup(short depth_data[]);
+	void printDataToFile(short data[]);
 	~driver();
 
 	string file_path; // set this to a constant value that will always hold the location of the color image for processing
