@@ -14,6 +14,7 @@ Lee				3/9/16			removed Kinect and glut functions, Kinect code now implemented i
 Lee				3/14/16			modified initialize() to return bool based on success
 Jacob/Lee		3/15/16			implemented edge detection software
 Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color using hsv color space
+Lee				3/25/16			added code needed to read data from a file if needed
 --------------------------------------------------------------------------------
 */
 #include "profile.h"
@@ -28,6 +29,7 @@ profile::profile()
 bool profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
+	readDataFromFile();
 	edgeDetection();
 
 	return profile_verified;
@@ -78,6 +80,19 @@ void profile::edgeDetection()
 	waitKey(0); 
 
 	return;
+}
+
+void profile::readDataFromFile()
+{
+	ifstream data_in;
+	data_in.open("C:\\Users\\Lee Seemann\\Documents\\GitHub\\CPE_Senior_Design\\C# Wrapper\\wrapper\\wrapper\\bin\\Debug\\data.txt");
+	int size = 307200;
+	depth_data = new short[size]; // this value should be dynamically obtained if this function is used other than for debugging
+	for (int i = 0; i < size; i++)
+	{
+		data_in >> depth_data[i];
+	}
+	
 }
 
 profile::~profile()
