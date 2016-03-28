@@ -15,6 +15,7 @@ Lee				2/19/16			modified project to utilize OpenCV, used profile.h to test
 Lee				3/10/16			added bool to track the success of the profile verification
 Jacob/Lee		3/15/16			implemented edge detection software
 Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color using hsv color space 
+Lee				3/25/16			added code needed to read data from a file if needed
 --------------------------------------------------------------------------------
 */
 #ifndef PROFILE_H
@@ -32,6 +33,7 @@ Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color 
 #include <NuiSensor.h>
 #include <opencv2\imgproc\imgproc.hpp> 
 #include <opencv2\highgui\highgui.hpp>
+#include <fstream>
 
 // define the size of the Kinect frame
 #define width 640
@@ -47,6 +49,7 @@ public:
 
 	bool initialize();
 	void edgeDetection();
+	void readDataFromFile();
 	bool profile_verified = false;
 
 	Mat image; // the original image before edge detection
@@ -58,6 +61,7 @@ public:
 	int shift_amount; // the amount the Hue space was shifted
 	char* window_name = "Edge Detection";
 	char* file_name;
+	short* depth_data;
 
 	
 	~profile(); // class destructor 

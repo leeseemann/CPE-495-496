@@ -38,6 +38,7 @@ public:
 	driver();
 	int* startup(short depth_data[]);
 	void printDataToFile(short data[]);
+	void readDataFromFile();
 	~driver();
 
 	string file_path; // set this to a constant value that will always hold the location of the color image for processing

@@ -21,6 +21,7 @@ Lee             3/10/16         added start/end buttons to the GUI to faciliate 
 Lee             3/14/16         added code to process the success/failure of the verification
                                 based on an int array received from the C++ DLL
 Lee             3/23/16         added code to update the GUI based on the success/failure of the verification
+Lee             3/25/16         added code to write depth data to a file for debugging
 --------------------------------------------------------------------------------
 */
 
@@ -41,6 +42,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.IO;
+using System.Text;
 
 
 namespace wrapper
@@ -66,6 +68,7 @@ namespace wrapper
         IntPtr dll_ptr; // pointer used to retrieve results from the dll
         int[] results = new int[5] {1, 2, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component
         public bool continue_verification = false;
+        public short[] test_data = new short[3];
 
         /// <summary>
         /// Main() creates an instance of the Answer class and kickstarts the verification process
@@ -81,15 +84,12 @@ namespace wrapper
             
             Answer instance = new Answer();
             instance.processResults(instance.results, GUI);
-
+            instance.initKinectSensor();
+            instance.retrieveKinectDepth();
+            instance.retrieveKinectColor();
+            instance.writeDataToFile(instance.depth_data);
+            instance.processResults(instance.results, GUI);
             GUI.ShowDialog();
-        //    instance.initKinectSensor();
-        //    instance.retrieveKinectDepth();
-        //    instance.retrieveKinectColor();
-
-   //         System.Windows.Forms.Application.Run(GUI);
-   //         instance.processResults(instance.results, GUI);
-
         }
 
        /* public void driver()
@@ -127,7 +127,6 @@ namespace wrapper
                 Console.WriteLine("ERROR: Kinect Not Initialized");
                 System.Windows.Forms.Application.Exit();
             }
-            //retrieveKinectDepth(sensor);
         }
 
         /// <summary>
@@ -153,8 +152,6 @@ namespace wrapper
                 Thread.Sleep(10);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
                 while (frame_count < NUM_FRAMES) ; // wait until a sufficient number of frames have been retrieved
                 Console.WriteLine("Kinect Depth Data Successfully Retrieved");
-             //   retrieveKinectColor();
-
         }
 
         /// <summary>
@@ -179,8 +176,8 @@ namespace wrapper
             
             while (color_retrieved == false) ;
 
-            dll_ptr = Steelcase_Answer_Verification(depth_data); // pass the averaged depth data and color image to the C++ DLL
-            Marshal.Copy(dll_ptr, results, 0, 5);
+         //   dll_ptr = Steelcase_Answer_Verification(depth_data); // pass the averaged depth data and color image to the C++ DLL
+         //   Marshal.Copy(dll_ptr, results, 0, 5);
             //return results;
             //processResults(results);
         }
@@ -201,6 +198,7 @@ namespace wrapper
                     {
                         sensor.Stop(); // temporarily disable the Kinect sensor
                         depth_data = new short[depth_frame.PixelDataLength]; // allocate space to hold the depth data
+                        Console.WriteLine("data: " + depth_frame.PixelDataLength);
                         depth_frame.CopyPixelDataTo(depth_data); // copy the depth data to the array
                         depth_frames.Add(depth_data); // add the depth data to the list of frames   
                     }
@@ -276,6 +274,7 @@ namespace wrapper
             for (int k = 0; k < average_depth.Length; k++)
             {
                 average_depth[k] = (short)(average_depth[k]/NUM_FRAMES);
+               // average_depth[k] = average_depth[k] >> 3; // shift the bits of the depth data
             }
 
            // File.WriteAllBytes("Depth.txt", average_depth);
@@ -365,6 +364,17 @@ namespace wrapper
         {
             Console.WriteLine("Verification Software Terminated");
             
+        }
+
+        public void writeDataToFile(short[] depth_data)
+        {
+            StringBuilder data = new StringBuilder();
+
+            for(int i = 0; i < depth_data.Length; i++)
+            {
+                data.Append(depth_data[i] + " ");
+            }
+            File.WriteAllText("data.txt", data.ToString());
         }
      }
 
