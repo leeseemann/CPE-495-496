@@ -25,7 +25,7 @@ class quantity
 public:
 	quantity(); // class constructor
 	bool initialize();
-	bool quantity_verified = false;
+	bool quantity_verified = false; // bool indicating the success/failure of the quantity verification
 	~quantity(); // class destructor 
 };
 

@@ -26,6 +26,7 @@ driver::driver()
 {
 }
 
+// startup() functions like main and kicks off the execution of the rest of the verification software
 int* driver::startup(short depth_data[])
 {
 	printDataToFile(depth_data);
@@ -44,7 +45,7 @@ int* driver::startup(short depth_data[])
 			cout << "result: " << result_query->getInt(1) << endl;
 	}
 
-	cout << "info: " << depth_data[0];
+	//cout << "info: " << depth_data[0];
 
 	is_profile_correct = verify_profile.initialize(); // initialize profile verification
 	is_length_correct = verify_length.initialize(); // initialize length verification
@@ -76,6 +77,7 @@ int* driver::startup(short depth_data[])
 	return results;
 }
 
+// printDataToFile() prints an array to a file for debugging purposes
 void driver::printDataToFile(short data[])
 {
 	ofstream data_file;

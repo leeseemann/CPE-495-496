@@ -38,23 +38,23 @@ public:
 	driver();
 	int* startup(short depth_data[]);
 	void printDataToFile(short data[]);
-	void readDataFromFile();
 	~driver();
 
 	string file_path; // set this to a constant value that will always hold the location of the color image for processing
-	profile verify_profile;
-	length verify_length;
-	color verify_color;
-	quantity verify_quantity;
-	enum options:int{wrong_profile = 1, wrong_length = 2, wrong_color = 3, wrong_quantity = 4, correct = 5};
+	profile verify_profile; // instance of the profile verification class
+	length verify_length;  // instance of the length verification class
+	color verify_color;  // instance of the color verification class
+	quantity verify_quantity; // instance of the quantity verification class
+	enum options:int{wrong_profile = 1, wrong_length = 2, wrong_color = 3, wrong_quantity = 4, correct = 5}; // enum containing possible results of the verification process
 
 	int results[4];
 
-	bool is_profile_correct;
-	bool is_length_correct;
-	bool is_color_correct;
-	bool is_quantity_correct;
+	bool is_profile_correct; // bool indication the success/failure of the profile verification
+	bool is_length_correct; // bool indication the success/failure of the length verification
+	bool is_color_correct; // bool indication the success/failure of the color verification
+	bool is_quantity_correct; // bool indication the success/failure of the quantity verification
 
+	// variable needed to connect to and query test Oracle database
 	string userName;
 	string password;
 	string connectString;

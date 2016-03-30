@@ -26,7 +26,7 @@ class color
 public:
 	color(); // class constructor
 	bool initialize();
-	bool color_verified = false;
+	bool color_verified = false; // bool indicating the success/failure of the color software
 	~color(); // class destructor 
 };
 

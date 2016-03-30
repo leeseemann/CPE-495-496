@@ -29,14 +29,14 @@ profile::profile()
 bool profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
-	readDataFromFile();
-	edgeDetection();
+	readDataFromFile(); // reads depth data into array from file, debugging purposes only
+	edgeDetection(); // performs the edge detection on the color image provided
 
 	return profile_verified;
 }
 
 
-// The edgeDetection() function performs Canny edge detection of an image containing the Answer component using the HSV color space
+// edgeDetection() performs Canny edge detection of an image containing the Answer component using the HSV color space
 void profile::edgeDetection()
 {
 	
@@ -82,6 +82,7 @@ void profile::edgeDetection()
 	return;
 }
 
+// readDataFromFile() reads the depth data from a .txt file into an array for processing
 void profile::readDataFromFile()
 {
 	ifstream data_in;

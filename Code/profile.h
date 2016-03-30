@@ -50,18 +50,18 @@ public:
 	bool initialize();
 	void edgeDetection();
 	void readDataFromFile();
-	bool profile_verified = false;
+	bool profile_verified = false; // bool indicating the success/failure of the profile verification software
 
 	Mat image; // the original image before edge detection
 	Mat destination; // the final data after edge detection
 	Mat hsv;
 	vector<Mat> hsv_channels; // vector containing the three channels of data in the HSV color space
-	Mat hsv_H, hsv_S, hsv_V; 
+	Mat hsv_H, hsv_S, hsv_V; // holds the data for the three channels in the HSV color space
 	Mat shifted_H, canny_H;
 	int shift_amount; // the amount the Hue space was shifted
 	char* window_name = "Edge Detection";
 	char* file_name;
-	short* depth_data;
+	short* depth_data; // array to hold the depth data
 
 	
 	~profile(); // class destructor 

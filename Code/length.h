@@ -26,7 +26,7 @@ class length
 public:
 	length(); // class constructor
 	bool initialize();
-	bool length_verified = false;
+	bool length_verified = false; // bool indicating the success/failure of the length verification software
 	~length(); // class destructor 
 };
 

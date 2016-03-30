@@ -13,6 +13,7 @@ Lee             3/14/16         created a status bar and added four labels to in
                                 the success/failure of each verification component
 Lee             3/23/16         added code to update the four status bar labels based
                                 on the success/failure of the verification process
+
 --------------------------------------------------------------------------------
 */
 
@@ -44,9 +45,9 @@ namespace wrapper
         public void startButton_Click(object sender, EventArgs e)
         {
             var instance = new Answer();
-            instance.continue_verification = true;
-            this.Close();
-           // instance.driver();
+            this.Hide();
+            instance.initKinectSensor();
+           // this.Close();
         }
 
         /// <summary>
