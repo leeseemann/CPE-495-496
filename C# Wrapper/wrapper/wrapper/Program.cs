@@ -67,18 +67,18 @@ namespace wrapper
         public WriteableBitmap color_bitmap; // bitmap to hold the rgb color data provided by the Kinect
         public string file_path; // path to the location of the color image file
         IntPtr dll_ptr; // pointer used to retrieve results from the dll
-        int[] results = new int[5] {1, 2, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component, currently initialized for testing purposes
+        int[] results = new int[5] {1, 0, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component, currently initialized for testing purposes
         Form1 GUI = new Form1(); // an instance of the GUI
 
         /// <summary>
-        /// Main() creates an instance of the Answer class and kickstarts the verification process
+        /// Main() creates an instance of the Answer class and displays the initial version of the GUI
         /// </summary>
         static void Main()
         {
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
            
-            // create an instance of the Answer class and display the GUI to allow user interaction
+            // create an instance of the Answer class and display the initial GUI to allow user interaction
             Answer instance = new Answer();
             instance.GUI.ShowDialog(); // display the initial GUI
         }
@@ -101,12 +101,13 @@ namespace wrapper
             if(sensor == null) // if there isn't a Kinect sensor to connect to, terminate the program
             {
                 Console.WriteLine("ERROR: Kinect Not Initialized");
-                System.Environment.Exit(0);
+                //System.Environment.Exit(0);
             }
-            //  retrieveKinectDepth();
-            //  retrieveKinectColor();
-            //   writeDataToFile(depth_data);
-            processResults(results, GUI);
+
+            //  retrieveKinectDepth(); // setup the Kinect sensor and retrieve depth data
+            //  retrieveKinectColor(); // setup the Kinect sensor and retrieve color data
+            //   writeDataToFile(depth_data); // write depth data to file for debugging 
+            processResults(results, GUI); // updates the GUI to indicate the success/failure of the verification
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace wrapper
                     Console.WriteLine("ERROR: No Kinect Sensor Found");
                 }
                 Console.WriteLine("Kinect Sensor Retrieving Depth");
-                Thread.Sleep(10);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
+                Thread.Sleep(10);  // stop the program long enough for the first frame to become available from the Kinect, otherwise the program will terminate immediately
 
                 while (frame_count < NUM_FRAMES) ; // wait until a sufficient number of frames have been retrieved
 
@@ -144,7 +145,7 @@ namespace wrapper
         {
             // Initialize the color sensor
             Console.WriteLine("Initializing Kinect Color Sensor");
-            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30); 
             sensor.ColorFrameReady += colorFrameReady;
 
             // start the sensor, and abort if there is an issue
@@ -171,7 +172,7 @@ namespace wrapper
         /// <param name="e"> event arguments </param>
         void depthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            Console.WriteLine("Depth Frame Received");
+            Console.WriteLine("Depth Frame Ready for Processing");
             if (frame_count < NUM_FRAMES) // if we have not retrieved the necessary number of frames 
             {
                 using (DepthImageFrame depth_frame = e.OpenDepthImageFrame()) // retrieve the frame
@@ -180,7 +181,6 @@ namespace wrapper
                     {
                         sensor.Stop(); // temporarily disable the Kinect sensor
                         depth_data = new short[depth_frame.PixelDataLength]; // allocate space to hold the depth data
-                      //  Console.WriteLine("data: " + depth_frame.PixelDataLength);
                         depth_frame.CopyPixelDataTo(depth_data); // copy the depth data to the array
                         depth_frames.Add(depth_data); // add the depth data array to the list of frames   
                     }
@@ -192,11 +192,11 @@ namespace wrapper
                         sensor.Stop();
                         depth_data = averageKinectDepth(depth_frames); // average the depth data from all the frames retrieved
                         return;
-                        //Console.WriteLine(depth_data[0]);
+
                     }
                     sensor.Start();  // restart the sensor
                 }
-                Console.WriteLine("Done Processing Depth Frame");
+                Console.WriteLine("Finished Processing Depth Frame");
             }
         }
 
@@ -207,6 +207,7 @@ namespace wrapper
         /// <param name="e"> event arguments </param>
         void colorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
+            Console.WriteLine("Color Frame Ready for Processing");
             if (color_retrieved == false) // if we have not yet retrieved a color frame for processing
             {
                 using (ColorImageFrame color_frame = e.OpenColorImageFrame())
@@ -225,12 +226,13 @@ namespace wrapper
                         {
                             Console.WriteLine("ERROR: IOException");
                         }
-                            // color_image.Source = color_bitmap;                                                                                                                                           
+                        // color_image.Source = color_bitmap;                                                                                                                                           
                         saveImage(color_bitmap); // save the image
                     }
                     sensor.Start();  // restart the sensor
                 }
                 color_retrieved = true; // indicates that a color frame has been retrieved and there is no need to retrieve another
+                Console.WriteLine("Finished Processing Color Frame");
             }
         }
 
@@ -241,6 +243,7 @@ namespace wrapper
         /// <returns></returns>
         short[] averageKinectDepth(List<short[]> depth_frames)
         {
+            Console.WriteLine("Averaging Depth Data");
             short[] average_depth = new short[depth_frames[0].Length]; // temporary array to hold averaged depth data
 
             for(int i = 0; i < depth_frames[0].Length; i++) // initialize the array elements to 0
@@ -258,8 +261,8 @@ namespace wrapper
                 average_depth[k] = (short)(average_depth[k]/NUM_FRAMES);
                // average_depth[k] = average_depth[k] >> 3; // shift the bits of the depth data
             }
-
-           // File.WriteAllBytes("Depth.txt", average_depth);
+            Console.WriteLine("Finished Averaging Depth Data");
+            // File.WriteAllBytes("Depth.txt", average_depth);
             return average_depth;
         }
 
@@ -298,11 +301,7 @@ namespace wrapper
         /// <param name="GUI"></param> the GUI that is displayed to the user
         public void processResults(int[] results, Form1 GUI)
         {
-            Console.WriteLine(results[0]);
-            Console.WriteLine(results[1]);
-            Console.WriteLine(results[2]);
-            Console.WriteLine(results[3]);
-            Console.WriteLine(results[4]);
+            Console.WriteLine("Processing Results of Verification Software");
 
             if (results[4] == 5) // if the order is correct, all verification components must have been successful
             {
@@ -338,6 +337,7 @@ namespace wrapper
                     GUI.quantityStatus_Success(null, null);
             }
             GUI.ShowDialog();
+            Console.WriteLine("Finished Processing Results of Verification Software");
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace wrapper
         /// </summary>
         public void terminateVerificationSoftware()
         {
-            Console.WriteLine("Verification Software Terminated");
+            Console.WriteLine("Terminating Verification Software");
             System.Environment.Exit(0);
         }
 

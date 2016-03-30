@@ -1,4 +1,24 @@
-﻿namespace wrapper
+﻿/* University of Alabama in Huntsville
+2015-2016 CPE Senior Design - Steelcase Answer Pack Verification
+Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
+
+Program.cs - C# wrapper which utilizes a DLL to run the C++ source code of the project
+
+Modification History
+Developer		Date			Comments
+--------------------------------------------------------------------------------
+Lee             3/10/16         created initial GUI and added start/end buttons
+                                to faciliate execution of the program
+Lee             3/14/16         created a status bar and added four labels to indicate
+                                the success/failure of each verification component
+Lee             3/23/16         added code to update the four status bar labels based
+                                on the success/failure of the verification process
+Lee             3/30/16         fixed miscellaneous GUI issues
+
+--------------------------------------------------------------------------------
+*/
+
+namespace wrapper
 {
     partial class Form1
     {
@@ -43,9 +63,10 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(190, 147);
+            this.startButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startButton.Location = new System.Drawing.Point(78, 147);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(180, 47);
+            this.startButton.Size = new System.Drawing.Size(292, 161);
             this.startButton.TabIndex = 0;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
@@ -53,9 +74,10 @@
             // 
             // endButton
             // 
+            this.endButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.endButton.Location = new System.Drawing.Point(402, 147);
             this.endButton.Name = "endButton";
-            this.endButton.Size = new System.Drawing.Size(180, 47);
+            this.endButton.Size = new System.Drawing.Size(282, 161);
             this.endButton.TabIndex = 1;
             this.endButton.Text = "End";
             this.endButton.UseVisualStyleBackColor = true;
@@ -64,10 +86,11 @@
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.SystemColors.InactiveBorder;
-            this.textBox1.Location = new System.Drawing.Point(190, 92);
+            this.textBox1.Location = new System.Drawing.Point(78, 62);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(392, 26);
+            this.textBox1.Size = new System.Drawing.Size(606, 48);
             this.textBox1.TabIndex = 7;
             this.textBox1.Text = "Steelcase Answer Pack Verification";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -81,55 +104,59 @@
             this.lengthStatus,
             this.colorStatus,
             this.quantityStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 378);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(874, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(774, 50);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // profileStatus
             // 
             this.profileStatus.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.profileStatus.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.profileStatus.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.profileStatus.Name = "profileStatus";
-            this.profileStatus.Size = new System.Drawing.Size(62, 25);
+            this.profileStatus.Size = new System.Drawing.Size(111, 45);
             this.profileStatus.Text = "Profile";
             this.profileStatus.Click += new System.EventHandler(this.statusLabel_Click);
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 25);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 45);
             // 
             // lengthStatus
             // 
             this.lengthStatus.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lengthStatus.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.lengthStatus.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lengthStatus.Name = "lengthStatus";
-            this.lengthStatus.Size = new System.Drawing.Size(66, 25);
+            this.lengthStatus.Size = new System.Drawing.Size(118, 45);
             this.lengthStatus.Text = "Length";
             // 
             // colorStatus
             // 
             this.colorStatus.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.colorStatus.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.colorStatus.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.colorStatus.Name = "colorStatus";
-            this.colorStatus.Size = new System.Drawing.Size(55, 25);
+            this.colorStatus.Size = new System.Drawing.Size(97, 45);
             this.colorStatus.Text = "Color";
             // 
             // quantityStatus
             // 
             this.quantityStatus.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.quantityStatus.Font = new System.Drawing.Font("Segoe UI", 16F);
             this.quantityStatus.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.quantityStatus.Name = "quantityStatus";
-            this.quantityStatus.Size = new System.Drawing.Size(80, 25);
+            this.quantityStatus.Size = new System.Drawing.Size(141, 45);
             this.quantityStatus.Text = "Quantity";
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 564);
+            this.splitter1.Size = new System.Drawing.Size(3, 378);
             this.splitter1.TabIndex = 8;
             this.splitter1.TabStop = false;
             // 
@@ -137,7 +164,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(874, 594);
+            this.ClientSize = new System.Drawing.Size(774, 428);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.textBox1);

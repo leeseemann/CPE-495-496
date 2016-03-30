@@ -13,6 +13,7 @@ Lee             3/14/16         created a status bar and added four labels to in
                                 the success/failure of each verification component
 Lee             3/23/16         added code to update the four status bar labels based
                                 on the success/failure of the verification process
+Lee             3/30/16         fixed miscellaneous GUI issues
 
 --------------------------------------------------------------------------------
 */
@@ -47,7 +48,6 @@ namespace wrapper
             var instance = new Answer();
             this.Hide();
             instance.initKinectSensor();
-           // this.Close();
         }
 
         /// <summary>
