@@ -145,7 +145,7 @@ namespace wrapper
         {
             // Initialize the color sensor
             Console.WriteLine("Initializing Kinect Color Sensor");
-            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30); 
+            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution1280x960Fps12); 
             sensor.ColorFrameReady += colorFrameReady;
 
             // start the sensor, and abort if there is an issue
