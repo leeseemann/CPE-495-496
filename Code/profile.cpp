@@ -436,13 +436,13 @@ void profile::thresh_callback2(int, void*)
 
 		double Angle = atan2(l[3] - l[1], l[2] - l[0]) * 180.0 / CV_PI;
 
-		//if (Angle != 0)
+		if (Angle != 0)
 
-		//{
+		{
 
 		line(instance.cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
 
-		//}
+		}
 
 	}
 
