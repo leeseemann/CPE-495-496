@@ -4,13 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 database.h - header file for the database software
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				1/9/16			database class created, added connectDatabase(), queryDatabase(), and necessary variables
-
-
---------------------------------------------------------------------------------
 */
 #ifndef DATABASE_H
 #define DATABASE_H

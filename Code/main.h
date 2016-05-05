@@ -4,13 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 main.h - header file for main.cpp
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				1/9/16		file created, moved variable declarations from main.cpp
-
-
---------------------------------------------------------------------------------
 */
 #ifndef MAIN_H
 #define MAIN_H

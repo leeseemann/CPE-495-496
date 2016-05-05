@@ -4,13 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 database.cpp - source file for the database software
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				1/9/16			file created, added connectDatabase(), queryDatabase(), disconnectDatabase()
-
-
---------------------------------------------------------------------------------
 */
 #include "database.h"
 

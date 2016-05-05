@@ -4,23 +4,9 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 profile.cpp - source file for the profile verification software
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				12/22/15		file created, added initialize() function
-Lee				1/25/16			added initialize_Kinect() and getKinectFrame() functions
-Lee				1/25/16			added glut functions to display Kinect frame
-Lee				3/9/16			removed Kinect and glut functions, Kinect code now implemented in C# wrapper
-Lee				3/14/16			modified initialize() to return bool based on success
-Jacob/Lee		3/15/16			implemented edge detection software
-Jacob/Lee		3/16/16			modified edge detection to detect edges of a certain color using hsv color space
-Lee				3/25/16			added code needed to read data from a file if needed
---------------------------------------------------------------------------------
 */
 
 #include "profile.h"
-
-
 using namespace std;
 
 profile::profile()
@@ -38,64 +24,35 @@ bool profile::initialize()
 void profile::thresh_callback(int, void*)
 
 {
+	instance.src = imread("panel3.jpg");
+	/// Convert image to gray and blur it
+	cvtColor(instance.src, instance.src_gray, CV_BGR2GRAY);
+	blur(instance.src_gray, instance.src_gray, Size(3, 3));
 	instance.rng(instance.num);
 	//profile instance;
 
 	Mat canny_output;
-
 	vector<vector<Point> > contours;
-
 	vector<Vec4i> hierarchy;
 
-
-
-
 	/// Detect edges using canny
-
 	threshold(instance.src_gray, instance.threshold_output, instance.thresh, 255, THRESH_BINARY);
-
-	// was src_gray
-
 	Canny(instance.threshold_output, canny_output, instance.thresh, instance.thresh * 2, 3);
 
 	/// Find contours
-
-	// added here *****
-
-	//threshold(canny_output, threshold_output, thresh, 255, THRESH_OTSU);
-
-	// ***** changed from canny_output to threshold_output
-
 	findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
-
-
-
-
 	/// Draw contours
-
-	// **edit drawing
-
 	instance.drawing = Mat::zeros(canny_output.size(), CV_8UC3); // ** originally CV_8UC3
 
 	for (int i = 0; i< contours.size(); i++)
-
 	{
-
 		Scalar color = Scalar(instance.rng.uniform(0, 255), instance.rng.uniform(0, 255), instance.rng.uniform(0, 255));
-
 		drawContours(instance.drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
-
 	}
 
-
-
-
 	/// Show in a window
-
 	namedWindow("Contours", CV_WINDOW_AUTOSIZE);
-
 	imshow("Contours", instance.drawing);
-
 }
 
 // edgeDetection() performs Canny edge detection of an image containing the Answer component using the HSV color space
@@ -106,26 +63,14 @@ void profile::edgeDetection()
 	/// Convert image to gray and blur it
 	cvtColor(src, src_gray, CV_BGR2GRAY);
 	blur(src_gray, src_gray, Size(3, 3));
-
-	///*
-
 	/// Create Window
-
 	char* source_window = "Source";
 	namedWindow(source_window, CV_WINDOW_AUTOSIZE);
 	imshow(source_window, src);
 	createTrackbar(" Canny thresh:", "Source", &thresh, max_thresh, instance.thresh_callback);
 
-	//*/
-
 	thresh_callback(0, 0);
-	/// Load source image and convert it to gray
-	//src = imread("panel3.jpg");
-	/// Convert image to gray and blur it
-	//cvtColor(src, src_gray, CV_BGR2GRAY);
-	//blur(src_gray, src_gray, Size(3, 3));
 
-	///*
 	/// Create Window
 	char* source_window3 = "Source";
 	namedWindow(source_window3, CV_WINDOW_AUTOSIZE);
@@ -135,247 +80,96 @@ void profile::edgeDetection()
 
 	thresh_callback2(0, 0);
 
-
-
 	namedWindow(source_window2, CV_WINDOW_AUTOSIZE);
-
 	imshow(source_window2, src);
-
-
-
 
 	createTrackbar("Threshold: ", source_window2, &thresh, max_thresh, instance.cornerHarris_demo);
 
 	cornerHarris_demo(0, 0);
 
-
-
 	waitKey(0);
-	
-	/*file_name = "C:\\Users\\Lee Seemann\\Desktop\\KinectSnapshot.png";
-	image = imread(file_name); // load an image for processing
-	
-	if (!image.data) // if the image in invalid, exit the software
-	{
-		cout << "ERROR: No image loaded for edge detection";
-		profile_verified = false;
-		return;
-	}
-
-	cvtColor(image, hsv, CV_BGR2HSV);  // convert image color to hsv format
-	
-	// separate the hsv data into 3 channels (Hue-H, Saturation-S, Value-V)
-	split(hsv, hsv_channels);  
-	hsv_H = hsv_channels[0];
-	hsv_S = hsv_channels[1];
-	hsv_V = hsv_channels[2];
-
-	// Hue space is a circular/angular value meaning the highest and lowest value are very close together
-	// This can result in bright artifacts at the edges of an object, we shift the entire Hue space to overcome this
-	shifted_H = hsv_H.clone();
-	shift_amount = 25;
-
-	for (int i = 0; i < shifted_H.rows; i++)
-		for (int j = 0; j < shifted_H.cols; j++)
-		{
-			shifted_H.at<unsigned char>(i, j) = (shifted_H.at<unsigned char>(i, j) + shift_amount) % 180;
-		}
-
-	// Perform canny edge detection
-	Canny(shifted_H, canny_H, 100, 50);
-
-	// display the results of the edge detection
-	destination = Scalar::all(0);
-	image.copyTo(destination, canny_H);
-	imshow(window_name, destination);
-
-	waitKey(0); 
-
-	return;*/
 }
 
-
-
-
-
-
 void profile::cornerHarris_demo(int, void*)
-
 {
-
-
-
 	Mat dst, dst_norm, dst_norm_scaled;
-
-	// edited **
-
-	//cvtColor(drawing, src_gray2, CV_BGR2GRAY);
-
 	cvtColor(instance.drawing2, instance.src_gray2, CV_BGR2GRAY);
-
-	//cv::transform(src_gray2, src_gray2, cv::Matx12f(1, 1));
-
-	//blur(src_gray2, src_gray2, Size(1, 1));
-
-
-
 
 	dst = Mat::zeros(instance.drawing.size(), CV_32FC1);
 
-	// added piece
-
-	// done adding
-
 	/// Detector parameters
-
 	int blockSize = 3;
-
 	int apertureSize = 3;
-
 	double k = 0.07;
 
-
-
-
 	/// Detecting corners
-
-	//**editing *** cornerHarris(src_gray, dst, blockSize, apertureSize, k, BORDER_DEFAULT);
-
 	cornerHarris(instance.src_gray2, dst, blockSize, apertureSize, k, BORDER_DEFAULT);
 
 	/// Normalizing
-
 	normalize(dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat());
 
 	convertScaleAbs(dst_norm, dst_norm_scaled);
 
-
-
-
 	/// Drawing a circle around corners
-
 	for (int j = 0; j < dst_norm.rows; j++)
-
 	{
-
 		for (int i = 0; i < dst_norm.cols; i++)
-
 		{
-
 			if ((int)dst_norm.at<float>(j, i) > instance.thresh)
-
 			{
-
 				circle(dst_norm_scaled, Point(i, j), 5, Scalar(0), 2, 8, 0);
-
 			}
-
 		}
-
 	}
 
 	/// Showing the result
-
 	namedWindow("Corners", CV_WINDOW_AUTOSIZE);
-
 	imshow("Corners", dst_norm_scaled);
-
 }
 
-
-
-
 void profile::thresh_callback2(int, void*)
-
 {
-
 	Mat threshold_output;
-
 	vector<vector<Point> > contours;
-
 	vector<Vec4i> hierarchy;
 
 	//** added snippet
-
 	cvtColor(instance.drawing, instance.src_gray2, CV_BGR2GRAY);
-
-
-
 
 	blur(instance.src_gray2, instance.src_gray2, Size(3, 3));
 
-	//** 
-
 	/// Detect edges using Threshold
-
 	threshold(instance.src_gray, threshold_output, instance.thresh, 255, THRESH_BINARY&&THRESH_OTSU);// had to change to OTSU thresholding
 
-																				   /// Find contours
-
+	/// Find contours
 	findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
-
-
-
 	/// Approximate contours to polygons + get bounding rects and circles
-
 	vector<vector<Point> > contours_poly(contours.size());
-
 	vector<Rect> boundRect(contours.size());
-
 	vector<Point2f>center(contours.size());
-
 	vector<float>radius(contours.size());
-
 	double perimeter;
 
 	for (int i = 0; i < contours.size(); i++)
-
 	{
-
 		perimeter = arcLength((Mat)(contours[i]), true);
-
 		if (perimeter > 9000)
-
 		{
-
 			approxPolyDP(Mat(contours[i]), contours_poly[i], 3.1, true);
-
 			boundRect[i] = boundingRect(Mat(contours_poly[i]));
-
 			minEnclosingCircle((Mat)contours_poly[i], center[i], radius[i]);
-
-
-
 		}
-
 	}
 
-
-
-
-
-
-
 	/// Draw polygonal contour + bonding rects + circles
-
 	instance.drawing2 = Mat::zeros(threshold_output.size(), CV_8UC3);
 
 	for (int i = 0; i< contours.size(); i++)
-
 	{
-
 		Scalar color = Scalar(instance.rng.uniform(0, 255), instance.rng.uniform(0, 255), instance.rng.uniform(0, 255));
-
 		drawContours(instance.drawing2, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point());
-
-		//rectangle(drawing2, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0);
-
-		//circle(drawing2, center[i], (int)radius[i], color, 2, 8, 0);
-
 	}
-
-	// start hugh transform
 
 	Canny(instance.drawing2, instance.dst, 50, 200, 3);
 
@@ -384,42 +178,21 @@ void profile::thresh_callback2(int, void*)
 #if 0
 
 	vector<Vec2f> lines;
-
 	HoughLines(dst, lines, 100, CV_PI / 360, 500, 100, 10); //(dst, lines, 10, CV_PI / 360, 500, 100, 10)
 
 	for (size_t i = 0; i < lines.size(); i++)
-
 	{
-
 		float rho = lines[i][0], theta = lines[i][1];
-
 		Point pt1, pt2;
-
 		double a = cos(theta), b = sin(theta);
-
 		double x0 = a*rho, y0 = b*rho;
 
 		pt1.x = cvRound(x0 + 1000 * (-b));
-
 		pt1.y = cvRound(y0 + 1000 * (a));
-
 		pt2.x = cvRound(x0 - 1000 * (-b));
-
 		pt2.y = cvRound(y0 - 1000 * (a));
 
-		//cout << abs(pt1 - pt2) << " ";
-
-
-
-
-		//if (pt1.y > 10000000)
-
-		//{
-
 		line(cdst, pt1, pt2, Scalar(0, 0, 255), 3, CV_AA);
-
-		//}
-
 	}
 
 #else
@@ -429,35 +202,22 @@ void profile::thresh_callback2(int, void*)
 	HoughLinesP(instance.dst, lines, 20, CV_PI / 360, 50, 135, 10); //(dst, lines, 1, CV_PI / 360, 50, 135, 10) *** threshold changed
 
 	for (size_t i = 0; i < lines.size(); i++)
-
 	{
-
 		Vec4i l = lines[i];
-
 		double Angle = atan2(l[3] - l[1], l[2] - l[0]) * 180.0 / CV_PI;
 
 		if (Angle != 0)
-
 		{
-
-		line(instance.cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
-
+			line(instance.cdst, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3, CV_AA);
 		}
-
 	}
 
 #endif
 
 	imshow("detected lines", instance.cdst);
-
-	//
-
 	/// Show in a window
-
 	namedWindow("Contours2", CV_WINDOW_AUTOSIZE);
-
 	imshow("Contours2", instance.drawing2);
-
 }
 // readDataFromFile() reads the depth data from a .txt file into an array for processing
 void profile::readDataFromFile()
@@ -496,7 +256,6 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	if (!vertical)
 	{
 		int tempPoint;
-
 		if (xa1 > xa2)
 		{
 			tempPoint = xa1;
@@ -520,7 +279,6 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	else
 	{
 		int tempPoint;
-
 		if (ya1 > ya2)
 		{
 			tempPoint = xa1;
@@ -988,9 +746,6 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	//This is where stuff could be to differentiate square and thin... but for now we'll just say thin cuz it's flat.
 	PROFILE prof = thin;
 	return prof;
-
-
-
 }
 
 profile::~profile()
