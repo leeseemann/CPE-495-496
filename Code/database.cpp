@@ -9,9 +9,12 @@ database.cpp - source file for the database software
 
 using namespace std;
 
+// Database class constructor
 database::database()
 {
 }
+
+// Create a connection to an oracle database
 oracle::occi::Connection* database::connectDatabase(string userName, string password, string connectString)
 {
 	oracle::occi::Environment *env = oracle::occi::Environment::createEnvironment(); // create Oracle environment
@@ -20,6 +23,7 @@ oracle::occi::Connection* database::connectDatabase(string userName, string pass
 	return conn;
 }
 
+// Query the Oracle database
 oracle::occi::ResultSet* database::queryDatabase(oracle::occi::Connection* conn, string query_string)
 {
 		query = conn->createStatement(query_string); // form Oracle database query
@@ -28,11 +32,7 @@ oracle::occi::ResultSet* database::queryDatabase(oracle::occi::Connection* conn,
 		return result;
 }
 
+// Database class destructor
 database::~database()
 {
-	// terminate the Oracle database connection and environment
-	//query->closeResultSet(result);
-	//conn->terminateStatement(query);
-	//env->terminateConnection(conn);
-	//oracle::occi::Environment::terminateEnvironment(env);
 }

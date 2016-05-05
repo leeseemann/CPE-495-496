@@ -9,6 +9,7 @@ color.cpp - source file for the color verification software
 
 using namespace std;
 
+// Color class constructor
 color::color()
 {
 }
@@ -19,6 +20,7 @@ bool color::initialize()
 	return color_verified;
 }
 
+// Color class destructor
 color::~color()
 {
 }

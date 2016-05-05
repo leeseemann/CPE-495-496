@@ -9,6 +9,7 @@ length.cpp - source file for the length verification software
 
 using namespace std;
 
+// Length class constructor
 length::length()
 {
 }
@@ -19,6 +20,7 @@ bool length::initialize()
 	return length_verified;
 }
 
+// Length class destructor
 length::~length()
 {
 }

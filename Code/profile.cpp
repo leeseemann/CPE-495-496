@@ -7,13 +7,16 @@ profile.cpp - source file for the profile verification software
 */
 
 #include "profile.h"
+
 using namespace std;
 
+// Profile class constructor
 profile::profile()
 {
 
 }
 
+//  called by the driver and kicks off the execution of the profile verification software
 bool profile::initialize()
 {
 	cout << "Initializing Profile Verification Software" << endl; 
@@ -21,27 +24,28 @@ bool profile::initialize()
 	edgeDetection(); // performs the edge detection on the color image provided
 	return profile_verified;
 }
+
+// executes each time a threshold value is modified using the slider within the GUI
 void profile::thresh_callback(int, void*)
 
 {
 	instance.src = imread("panel3.jpg");
-	/// Convert image to gray and blur it
+	// Convert image to gray and blur it
 	cvtColor(instance.src, instance.src_gray, CV_BGR2GRAY);
 	blur(instance.src_gray, instance.src_gray, Size(3, 3));
 	instance.rng(instance.num);
-	//profile instance;
 
 	Mat canny_output;
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	/// Detect edges using canny
+	// Detect edges using canny
 	threshold(instance.src_gray, instance.threshold_output, instance.thresh, 255, THRESH_BINARY);
 	Canny(instance.threshold_output, canny_output, instance.thresh, instance.thresh * 2, 3);
 
-	/// Find contours
+	// Find contours
 	findContours(canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
-	/// Draw contours
+	// Draw contours
 	instance.drawing = Mat::zeros(canny_output.size(), CV_8UC3); // ** originally CV_8UC3
 
 	for (int i = 0; i< contours.size(); i++)
@@ -50,20 +54,20 @@ void profile::thresh_callback(int, void*)
 		drawContours(instance.drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
 	}
 
-	/// Show in a window
+	// Show in a window
 	namedWindow("Contours", CV_WINDOW_AUTOSIZE);
 	imshow("Contours", instance.drawing);
 }
 
-// edgeDetection() performs Canny edge detection of an image containing the Answer component using the HSV color space
+// performs Canny edge detection of an image containing the Answer component using the HSV color space
 void profile::edgeDetection()
 {
-	/// Load source image and convert it to gray
+	// Load source image and convert it to gray
 	src = imread("panel3.jpg");
-	/// Convert image to gray and blur it
+	// Convert image to gray and blur it
 	cvtColor(src, src_gray, CV_BGR2GRAY);
 	blur(src_gray, src_gray, Size(3, 3));
-	/// Create Window
+	// Create Window
 	char* source_window = "Source";
 	namedWindow(source_window, CV_WINDOW_AUTOSIZE);
 	imshow(source_window, src);
@@ -71,7 +75,7 @@ void profile::edgeDetection()
 
 	thresh_callback(0, 0);
 
-	/// Create Window
+	// Create Window
 	char* source_window3 = "Source";
 	namedWindow(source_window3, CV_WINDOW_AUTOSIZE);
 	imshow(source_window3, src);
@@ -97,20 +101,20 @@ void profile::cornerHarris_demo(int, void*)
 
 	dst = Mat::zeros(instance.drawing.size(), CV_32FC1);
 
-	/// Detector parameters
+	// Detector parameters
 	int blockSize = 3;
 	int apertureSize = 3;
 	double k = 0.07;
 
-	/// Detecting corners
+	// Detecting corners
 	cornerHarris(instance.src_gray2, dst, blockSize, apertureSize, k, BORDER_DEFAULT);
 
-	/// Normalizing
+	// Normalizing
 	normalize(dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat());
 
 	convertScaleAbs(dst_norm, dst_norm_scaled);
 
-	/// Drawing a circle around corners
+	// Drawing a circle around corners
 	for (int j = 0; j < dst_norm.rows; j++)
 	{
 		for (int i = 0; i < dst_norm.cols; i++)
@@ -122,29 +126,29 @@ void profile::cornerHarris_demo(int, void*)
 		}
 	}
 
-	/// Showing the result
+	// Showing the result
 	namedWindow("Corners", CV_WINDOW_AUTOSIZE);
 	imshow("Corners", dst_norm_scaled);
 }
 
+// executes each time a threshold value is modified using the slider within the GUI
 void profile::thresh_callback2(int, void*)
 {
 	Mat threshold_output;
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	//** added snippet
 	cvtColor(instance.drawing, instance.src_gray2, CV_BGR2GRAY);
 
 	blur(instance.src_gray2, instance.src_gray2, Size(3, 3));
 
-	/// Detect edges using Threshold
+	// Detect edges using Threshold
 	threshold(instance.src_gray, threshold_output, instance.thresh, 255, THRESH_BINARY&&THRESH_OTSU);// had to change to OTSU thresholding
 
-	/// Find contours
+	// Find contours
 	findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
-	/// Approximate contours to polygons + get bounding rects and circles
+	// Approximate contours to polygons + get bounding rects and circles
 	vector<vector<Point> > contours_poly(contours.size());
 	vector<Rect> boundRect(contours.size());
 	vector<Point2f>center(contours.size());
@@ -162,7 +166,7 @@ void profile::thresh_callback2(int, void*)
 		}
 	}
 
-	/// Draw polygonal contour + bonding rects + circles
+	// Draw polygonal contour + bonding rects + circles
 	instance.drawing2 = Mat::zeros(threshold_output.size(), CV_8UC3);
 
 	for (int i = 0; i< contours.size(); i++)
@@ -199,7 +203,7 @@ void profile::thresh_callback2(int, void*)
 
 	vector<Vec4i> lines;
 
-	HoughLinesP(instance.dst, lines, 20, CV_PI / 360, 50, 135, 10); //(dst, lines, 1, CV_PI / 360, 50, 135, 10) *** threshold changed
+	HoughLinesP(instance.dst, lines, 20, CV_PI / 360, 50, 135, 10); 
 
 	for (size_t i = 0; i < lines.size(); i++)
 	{
@@ -215,7 +219,7 @@ void profile::thresh_callback2(int, void*)
 #endif
 
 	imshow("detected lines", instance.cdst);
-	/// Show in a window
+	// Show in a window
 	namedWindow("Contours2", CV_WINDOW_AUTOSIZE);
 	imshow("Contours2", instance.drawing2);
 }
@@ -233,6 +237,7 @@ void profile::readDataFromFile()
 	
 }
 
+// depth array provided by Kinect must be shifted to convert the data to millimeters
 void profile::shiftDepthArray(short depthArray[DEPTH_WIDTH*DEPTH_HEIGHT])
 {
 	for (int i = 0; i < DEPTH_WIDTH*DEPTH_HEIGHT; i++)
@@ -241,6 +246,7 @@ void profile::shiftDepthArray(short depthArray[DEPTH_WIDTH*DEPTH_HEIGHT])
 	}
 }
 
+// profile detection algorithm
 PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int yb1, int xb2, int yb2, short depthArray[DEPTH_WIDTH*DEPTH_HEIGHT])
 {
 	//there are two lines, a & b. 1s are the start points, and 2's are the end points
@@ -252,7 +258,7 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	float mA, mB, mAvg, mPerp; 			//line slopes
 	float intA, intB, intAvg;			//line intercepts
 
-										//this if statement ensures on the line that the first endpoint is the lesser one. This matters for later calculations.
+	//this if statement ensures on the line that the first endpoint is the lesser one. This matters for later calculations.
 	if (!vertical)
 	{
 		int tempPoint;
@@ -307,11 +313,9 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	lineBx = round((xb1 + xb2) / 2);
 	lineBy = round((yb1 + yb2) / 2);
 
-	//and some people thought middle school geometry wouldn't be useful.
-
 	if (!vertical) 	//horizontal: y = mx + b; m = slope, b = y intercept
 	{
-		/*find slopes and intercepts*/
+		// find slopes and intercepts
 		mA = (xa1 - xa2) / float(ya1 - ya2);
 		mB = (xb1 - xb2) / float(yb1 - yb2);
 		mAvg = (mA + mB) / 2.0;
@@ -446,9 +450,9 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 		}
 		//Trapezoid complete!	
 	}
-	else			//vertical:   x = my + b; m = slope, b = x intercept
+	else //vertical:   x = my + b; m = slope, b = x intercept
 	{
-		/*find slopes and intercepts*/
+		// find slopes and intercepts
 		mA = (ya1 - ya2) / float(xa1 - xa2);
 		mB = (yb1 - yb2) / float(xb1 - xb2);
 		mAvg = (mA + mB) / 2.0;
@@ -586,7 +590,7 @@ PROFILE profile::detectProfile(int xa1, int ya1, int xa2, int ya2, int xb1, int 
 	}
 
 
-	//With maths complete, translate points from color resolution to depth resolution.
+	//With math complete, translate points from color resolution to depth resolution.
 	xa1 = round((xa1 * DEPTH_WIDTH) / COLOR_WIDTH);
 	xa2 = round((xa2 * DEPTH_WIDTH) / COLOR_WIDTH);
 	xb1 = round((xb1 * DEPTH_WIDTH) / COLOR_WIDTH);

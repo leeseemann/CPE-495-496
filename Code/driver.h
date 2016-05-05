@@ -44,7 +44,7 @@ public:
 	bool is_color_correct; // bool indication the success/failure of the color verification
 	bool is_quantity_correct; // bool indication the success/failure of the quantity verification
 
-	// variable needed to connect to and query test Oracle database
+	// variables needed to connect to and query test Oracle database
 	string userName;
 	string password;
 	string connectString;

@@ -9,6 +9,7 @@ quantity.cpp - source file for the quantity verification software
 
 using namespace std;
 
+// Quantity class constructor
 quantity::quantity()
 {
 }
@@ -19,6 +20,7 @@ bool quantity::initialize()
 	return quantity_verified;
 }
 
+// Quantity class destructor
 quantity::~quantity()
 {
 }

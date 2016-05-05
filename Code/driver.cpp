@@ -13,11 +13,11 @@ driver::driver()
 {
 }
 
-// startup() functions like main and kicks off the execution of the rest of the verification software
+// functions like main() and kicks off the execution of the rest of the verification software
 int* driver::startup(short depth_data[])
 {
 	printDataToFile(depth_data);
-	// connect to Oracle database
+	// connect to test Oracle database
 	userName = "hr";
 	password = "uah";
 	connectString = "";
@@ -31,8 +31,6 @@ int* driver::startup(short depth_data[])
 		while (result_query->next())
 			cout << "result: " << result_query->getInt(1) << endl;
 	}
-
-	//cout << "info: " << depth_data[0];
 
 	is_profile_correct = verify_profile.initialize(); // initialize profile verification
 	is_length_correct = verify_length.initialize(); // initialize length verification
