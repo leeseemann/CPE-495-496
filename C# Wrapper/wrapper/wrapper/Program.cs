@@ -4,26 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 Program.cs - C# wrapper which utilizes a C++ DLL to run the primary source code of the project
 
-Modification History
-Developer		Date        	Comments
---------------------------------------------------------------------------------
-Lee 			12/28/15		file created, imported C++ DLL
-Lee             1/31/16         added code to pass Kinect depth info to DLL
-Lee             2/2/16          added code to retrieve depth data from Kinect
-Lee             2/17/16         added code to average multiple frames of Kinect 
-                                depth data together before sending it to DLL
-Lee             2/23/16         added code to retrieve color data from the Kinect
-Lee             3/2/16          added code to save color data as a jpg/png file 
-                                in order to access it from the c++ edge detection code
-Lee             3/7/16          added code to display color image as part of debugging
-Lee             3/8/16          added code to pass the color image file path to the C++ DLL for processing
-Lee             3/10/16         added start/end buttons to the GUI to faciliate execution of the program
-Lee             3/14/16         added code to process the success/failure of the verification
-                                based on an int array received from the C++ DLL
-Lee             3/23/16         added code to update the GUI based on the success/failure of the verification
-Lee             3/25/16         added code to write depth data to a file for debugging
-Lee             3/30/16         fixed miscellaneous GUI issues
---------------------------------------------------------------------------------
 */
 
 using System;
