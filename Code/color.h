@@ -4,14 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 color.h - header file for the color verification software
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				12/22/15		color class created, added initialize() function
-Lee				3/10/16			added bool to track the success of the color verification
-
-
---------------------------------------------------------------------------------
 */
 #ifndef COLOR_H
 #define COLOR_H
@@ -26,7 +18,7 @@ class color
 public:
 	color(); // class constructor
 	bool initialize();
-	bool color_verified = false;
+	bool color_verified = false; // bool indicating the success/failure of the color software
 	~color(); // class destructor 
 };
 

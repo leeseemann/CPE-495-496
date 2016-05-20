@@ -2,27 +2,8 @@
 2015-2016 CPE Senior Design - Steelcase Answer Pack Verification
 Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
-Program.cs - C# wrapper which utilizes a DLL to run the C++ source code of the project
+Program.cs - C# wrapper which utilizes a C++ DLL to run the primary source code of the project
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee 			12/28/15		file created, imported C++ DLL
-Lee             1/31/16         added code to pass Kinect depth info to DLL
-Lee             2/2/16          added code to retrieve depth data from Kinect
-Lee             2/17/16         added code to average multiple frames of Kinect 
-                                depth data together before sending it to DLL
-Lee             2/23/16         added code to retrieve color data from the Kinect
-Lee             3/2/16          added code to save color data as a jpg/png file 
-                                in order to access it from the c++ edge detection code
-Lee             3/7/16          added code to display color image as part of debugging
-Lee             3/8/16          added code to pass the color image file path to the C++ DLL for processing
-Lee             3/10/16         added start/end buttons to the GUI to faciliate execution of the program
-Lee             3/14/16         added code to process the success/failure of the verification
-                                based on an int array received from the C++ DLL
-Lee             3/23/16         added code to update the GUI based on the success/failure of the verification
-Lee             3/25/16         added code to write depth data to a file for debugging
---------------------------------------------------------------------------------
 */
 
 using System;
@@ -57,55 +38,30 @@ namespace wrapper
 
         // Variable declarations
         public const short NUM_FRAMES = 1; // number of depth frames to average together before sending depth data to DLL
-        public int frame_count = 0; // tracks the number of frames that have been retrieved for the current order
+        public int frame_count = 0; // tracks the number of depth frames that have been retrieved for the current order
         public List<short[]> depth_frames = new List<short[]>(); // list to hold multiple frames of depth data until they can be averaged
         KinectSensor sensor; // the Kinect sensor
         public short[] depth_data; // array to hold the depth info provided by the Kinect
         public byte[] color_data; // array to hold the color info provided by the Kinect
         bool color_retrieved = false; // used to determine if we have already retrieved color data for the current order
-        public WriteableBitmap color_bitmap; // bitmap to hold the rgb data from the Kinect
-        public string file_path; // path of the color image file
+        public WriteableBitmap color_bitmap; // bitmap to hold the rgb color data provided by the Kinect
+        public string file_path; // path to the location of the color image file
         IntPtr dll_ptr; // pointer used to retrieve results from the dll
-        int[] results = new int[5] {1, 2, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component
-        public bool continue_verification = false;
-        public short[] test_data = new short[3];
+        int[] results = new int[5] {1, 0, 3, 4, 0 }; // holds the ints that indicate the success/failure of each verification component, currently initialized for testing purposes
+        Form1 GUI = new Form1(); // an instance of the GUI
 
         /// <summary>
-        /// Main() creates an instance of the Answer class and kickstarts the verification process
+        /// Main() creates an instance of the Answer class and displays the initial version of the GUI
         /// </summary>
         static void Main()
         {
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            Form1 GUI = new Form1();
-           // System.Windows.Forms.Application.Run(GUI);
-            GUI.ShowDialog();
-            
-            
+           
+            // create an instance of the Answer class and display the initial GUI to allow user interaction
             Answer instance = new Answer();
-            instance.processResults(instance.results, GUI);
-            instance.initKinectSensor();
-            instance.retrieveKinectDepth();
-            instance.retrieveKinectColor();
-            instance.writeDataToFile(instance.depth_data);
-            instance.processResults(instance.results, GUI);
-            GUI.ShowDialog();
+            instance.GUI.ShowDialog(); // display the initial GUI
         }
-
-       /* public void driver()
-        {
-           // while (continue_verification == false) ;
-            
-           // if(continue_verification == true)
-           // {
-                initKinectSensor();
-                retrieveKinectDepth();
-                retrieveKinectColor();
-             //   continue_verification = false;
-             //   driver();
-            //}
-
-        }*/
 
         /// <summary>
         /// initKinectSensor() connects to an available Kinect sensor
@@ -113,7 +69,7 @@ namespace wrapper
         public void initKinectSensor()
         {
             Console.WriteLine("Initializing Verification Software");
-            foreach (var potential_Sensor in KinectSensor.KinectSensors) // are there any Kinect sensors available
+            foreach (var potential_Sensor in KinectSensor.KinectSensors) // if there is a Kinect sensor available
             {
                 if (potential_Sensor.Status == KinectStatus.Connected) // connect to the Kinect sensor
                 {
@@ -122,21 +78,27 @@ namespace wrapper
                     break;
                 }
             }
-            if(sensor == null) // if there isn't a Kinect sensor to connect to
+            if(sensor == null) // if there isn't a Kinect sensor to connect to, terminate the program
             {
                 Console.WriteLine("ERROR: Kinect Not Initialized");
-                System.Windows.Forms.Application.Exit();
+                //System.Environment.Exit(0);
             }
+
+            //  retrieveKinectDepth(); // setup the Kinect sensor and retrieve depth data
+            //  retrieveKinectColor(); // setup the Kinect sensor and retrieve color data
+            //   writeDataToFile(depth_data); // write depth data to file for debugging 
+            processResults(results, GUI); // updates the GUI to indicate the success/failure of the verification
         }
 
         /// <summary>
-        /// retrieveKinectData() initializes the Kinect sensor in order to begin the data retrieval process
+        /// retrieveKinectDepth() initializes the Kinect sensor, sets up the depth event handler, and retrieves the depth data
         /// </summary>
         public void retrieveKinectDepth()
-        {   
-                // Initialize the depth sensor
-                sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                sensor.DepthFrameReady += depthFrameReady; // event handler that executes when a frame is ready
+        {
+            // Initialize the depth sensor
+            Console.WriteLine("Initializing Kinect Depth Sensor");
+            sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+            sensor.DepthFrameReady += depthFrameReady; // event handler that executes when a depth frame is ready
 
                 // start the sensor, and abort if there is an issue
                 try
@@ -149,18 +111,21 @@ namespace wrapper
                     Console.WriteLine("ERROR: No Kinect Sensor Found");
                 }
                 Console.WriteLine("Kinect Sensor Retrieving Depth");
-                Thread.Sleep(10);  // stop the program long enough for a frame to become available from the Kinect, temporary fix
+                Thread.Sleep(10);  // stop the program long enough for the first frame to become available from the Kinect, otherwise the program will terminate immediately
+
                 while (frame_count < NUM_FRAMES) ; // wait until a sufficient number of frames have been retrieved
+
                 Console.WriteLine("Kinect Depth Data Successfully Retrieved");
         }
 
         /// <summary>
-        /// retrieveKinectColor() initializes the Kinect sensor ColorStream and sets up the event handler colorFrameReady
+        /// retrieveKinectColor() initializes the Kinect sensor, sets up the color event handler, and retrieves the color data
         /// </summary>
         void retrieveKinectColor()
         {
             // Initialize the color sensor
-            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30); // 1280 x 960 is also an option
+            Console.WriteLine("Initializing Kinect Color Sensor");
+            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution1280x960Fps12); 
             sensor.ColorFrameReady += colorFrameReady;
 
             // start the sensor, and abort if there is an issue
@@ -176,10 +141,8 @@ namespace wrapper
             
             while (color_retrieved == false) ;
 
-         //   dll_ptr = Steelcase_Answer_Verification(depth_data); // pass the averaged depth data and color image to the C++ DLL
-         //   Marshal.Copy(dll_ptr, results, 0, 5);
-            //return results;
-            //processResults(results);
+            // dll_ptr = Steelcase_Answer_Verification(depth_data); // pass the averaged depth data and color image to the C++ DLL
+            // Marshal.Copy(dll_ptr, results, 0, 5); // copy the array returned by the dll, this array contains the results of the verificationon process
         }
 
         /// <summary>
@@ -189,7 +152,7 @@ namespace wrapper
         /// <param name="e"> event arguments </param>
         void depthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            Console.WriteLine("Depth Frame Received");
+            Console.WriteLine("Depth Frame Ready for Processing");
             if (frame_count < NUM_FRAMES) // if we have not retrieved the necessary number of frames 
             {
                 using (DepthImageFrame depth_frame = e.OpenDepthImageFrame()) // retrieve the frame
@@ -198,9 +161,8 @@ namespace wrapper
                     {
                         sensor.Stop(); // temporarily disable the Kinect sensor
                         depth_data = new short[depth_frame.PixelDataLength]; // allocate space to hold the depth data
-                        Console.WriteLine("data: " + depth_frame.PixelDataLength);
                         depth_frame.CopyPixelDataTo(depth_data); // copy the depth data to the array
-                        depth_frames.Add(depth_data); // add the depth data to the list of frames   
+                        depth_frames.Add(depth_data); // add the depth data array to the list of frames   
                     }
 
                     frame_count++; // increment the number of frames that have been retrieved
@@ -210,11 +172,11 @@ namespace wrapper
                         sensor.Stop();
                         depth_data = averageKinectDepth(depth_frames); // average the depth data from all the frames retrieved
                         return;
-                        //Console.WriteLine(depth_data[0]);
+
                     }
                     sensor.Start();  // restart the sensor
                 }
-                Console.WriteLine("Done Processing Frame");
+                Console.WriteLine("Finished Processing Depth Frame");
             }
         }
 
@@ -225,6 +187,7 @@ namespace wrapper
         /// <param name="e"> event arguments </param>
         void colorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
+            Console.WriteLine("Color Frame Ready for Processing");
             if (color_retrieved == false) // if we have not yet retrieved a color frame for processing
             {
                 using (ColorImageFrame color_frame = e.OpenColorImageFrame())
@@ -243,12 +206,13 @@ namespace wrapper
                         {
                             Console.WriteLine("ERROR: IOException");
                         }
-                            // color_image.Source = color_bitmap;                                                                                                                                           
+                        // color_image.Source = color_bitmap;                                                                                                                                           
                         saveImage(color_bitmap); // save the image
                     }
                     sensor.Start();  // restart the sensor
                 }
                 color_retrieved = true; // indicates that a color frame has been retrieved and there is no need to retrieve another
+                Console.WriteLine("Finished Processing Color Frame");
             }
         }
 
@@ -259,6 +223,7 @@ namespace wrapper
         /// <returns></returns>
         short[] averageKinectDepth(List<short[]> depth_frames)
         {
+            Console.WriteLine("Averaging Depth Data");
             short[] average_depth = new short[depth_frames[0].Length]; // temporary array to hold averaged depth data
 
             for(int i = 0; i < depth_frames[0].Length; i++) // initialize the array elements to 0
@@ -276,8 +241,8 @@ namespace wrapper
                 average_depth[k] = (short)(average_depth[k]/NUM_FRAMES);
                // average_depth[k] = average_depth[k] >> 3; // shift the bits of the depth data
             }
-
-           // File.WriteAllBytes("Depth.txt", average_depth);
+            Console.WriteLine("Finished Averaging Depth Data");
+            // File.WriteAllBytes("Depth.txt", average_depth);
             return average_depth;
         }
 
@@ -310,17 +275,13 @@ namespace wrapper
         }
 
         /// <summary>
-        ///  processResults() utlizes an array received from the C++ DLL to alert the user to the success/failure of the verification
+        ///  processResults() utilizes an array received from the C++ DLL to update the GUI and alert the user to the success/failure of the verification
         /// </summary>
         /// <param name="results"></param> the array containing the results of the verification process
         /// <param name="GUI"></param> the GUI that is displayed to the user
         public void processResults(int[] results, Form1 GUI)
         {
-            Console.WriteLine(results[0]);
-            Console.WriteLine(results[1]);
-            Console.WriteLine(results[2]);
-            Console.WriteLine(results[3]);
-            Console.WriteLine(results[4]);
+            Console.WriteLine("Processing Results of Verification Software");
 
             if (results[4] == 5) // if the order is correct, all verification components must have been successful
             {
@@ -334,7 +295,7 @@ namespace wrapper
             {
                 if (results[0] == 1) // if profile verification failed
                     GUI.profileStatus_Failure(null, null);
-                else // if profile verification failed
+                else // if profile verification succeeded
                     GUI.profileStatus_Success(null, null);
 
                 if (results[1] == 2) // if length verification failed
@@ -355,6 +316,8 @@ namespace wrapper
                 else // if quantity verification succeeded
                     GUI.quantityStatus_Success(null, null);
             }
+            GUI.ShowDialog();
+            Console.WriteLine("Finished Processing Results of Verification Software");
         }
 
         /// <summary>
@@ -362,10 +325,14 @@ namespace wrapper
         /// </summary>
         public void terminateVerificationSoftware()
         {
-            Console.WriteLine("Verification Software Terminated");
-            
+            Console.WriteLine("Terminating Verification Software");
+            System.Environment.Exit(0);
         }
 
+        /// <summary>
+        /// writeDataToFile() writes the depth data retrieved from the Kinect to a file for debugging purposes
+        /// </summary>
+        /// <param name="depth_data"></param>
         public void writeDataToFile(short[] depth_data)
         {
             StringBuilder data = new StringBuilder();

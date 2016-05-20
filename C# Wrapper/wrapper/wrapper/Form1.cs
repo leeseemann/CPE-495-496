@@ -4,16 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 Program.cs - C# wrapper which utilizes a DLL to run the C++ source code of the project
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee             3/10/16         created initial GUI and added start/end buttons
-                                to faciliate execution of the program
-Lee             3/14/16         created a status bar and added four labels to indicate
-                                the success/failure of each verification component
-Lee             3/23/16         added code to update the four status bar labels based
-                                on the success/failure of the verification process
---------------------------------------------------------------------------------
 */
 
 using System;
@@ -44,9 +34,8 @@ namespace wrapper
         public void startButton_Click(object sender, EventArgs e)
         {
             var instance = new Answer();
-            instance.continue_verification = true;
-            this.Close();
-           // instance.driver();
+            this.Hide();
+            instance.initKinectSensor();
         }
 
         /// <summary>

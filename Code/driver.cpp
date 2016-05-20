@@ -4,19 +4,6 @@ Elaine Boyd, Jacob Brooks, Devon Eastin, Lee Seemann
 
 driver.cpp - source file for the length verification software
 
-Modification History
-Developer		Date			Comments
---------------------------------------------------------------------------------
-Lee				12/28/15		file created, added startup() function
-Lee				1/9/16			used OCCI to created Oracle database connection, executed test query
-Lee				1/31/16			modified startup() to receive data from C# wrapper
-Lee				3/9/16			added code to allow the path of the color image from the Kinect to be 
-								received from the C# driver
-Lee				3/14/16			added code to populate an array based on the success/failure of each
-								verification algorithm, this array tells the C# wrapper what is wrong 
-								with the order if an issue is found
-Lee				3/24/16			added code needed to print info to a file if needed
---------------------------------------------------------------------------------
 */
 #include "driver.h"
 
@@ -26,10 +13,11 @@ driver::driver()
 {
 }
 
+// functions like main() and kicks off the execution of the rest of the verification software
 int* driver::startup(short depth_data[])
 {
 	printDataToFile(depth_data);
-	// connect to Oracle database
+	// connect to test Oracle database
 	userName = "hr";
 	password = "uah";
 	connectString = "";
@@ -43,8 +31,6 @@ int* driver::startup(short depth_data[])
 		while (result_query->next())
 			cout << "result: " << result_query->getInt(1) << endl;
 	}
-
-	cout << "info: " << depth_data[0];
 
 	is_profile_correct = verify_profile.initialize(); // initialize profile verification
 	is_length_correct = verify_length.initialize(); // initialize length verification
@@ -76,6 +62,7 @@ int* driver::startup(short depth_data[])
 	return results;
 }
 
+// printDataToFile() prints an array to a file for debugging purposes
 void driver::printDataToFile(short data[])
 {
 	ofstream data_file;
